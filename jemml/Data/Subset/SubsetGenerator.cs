@@ -5,6 +5,9 @@ using jemml.Data.Record;
 
 namespace jemml.Data.Subset
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class SubsetGenerator
     {
         private Sample baseSample;

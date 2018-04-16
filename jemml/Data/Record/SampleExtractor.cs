@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace jemml.Data.Record.Extractor
+namespace jemml.Data.Record
 {
     public abstract class SampleExtractor : Preprocessor
     {

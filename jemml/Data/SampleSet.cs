@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using jemml.Data.Record;
-using jemml.Data.Record.Extractor;
 using jemml.Data.Subset;
 using jemml.Data.Transform;
 using jemml.Data.Transform.DimensionalityReduction;

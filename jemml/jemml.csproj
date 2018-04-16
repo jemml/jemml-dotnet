@@ -8,4 +8,11 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Transform\DimensionalityReduction\Geometric\" />
+    <Folder Include="Data\Transform\Transform\Wavelet\" />
+    <Folder Include="Data\Transform\Transform\Spectral\" />
+    <Folder Include="Data\Transform\Transform\Normalization\" />
+  </ItemGroup>
+
 </Project>
