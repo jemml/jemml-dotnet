@@ -70,7 +70,7 @@ namespace jemml.Classification
 
             // apply scaling/shift to the features in each training sample
             List<Sample> standardizedSamples = samplesToTrain.Select(sample => sample.AcceptVisitor(
-                new SampleDimensionVisitor(StandardizationHelpers.GenerateTransformedData(sample.GetDimensions(), (value, i) => (value * featureScaling[i]) + featureShift[i])))).ToList();
+                new SampleScaledDimensionVisitor(featureScaling, featureShift))).ToList();
 
             string[] trainingIdentifiers = SampleSetHelpers.GetIdentifiers(samplesToTrain, false);
             return CreateInstance(standardizedSamples, featureScaling, featureShift, trainingIdentifiers);
