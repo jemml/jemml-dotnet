@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace jemml.Data.Transform.Transform.Normalization
+namespace jemml.Data.Transform.Transform.Normalization.Regression
 {
     public class AlignedRegressionColumn : RegressionColumn
     {

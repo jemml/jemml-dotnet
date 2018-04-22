@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Accord.Statistics.Models.Regression.Linear;
 
-namespace jemml.Data.Transform.Transform.Normalization
+namespace jemml.Data.Transform.Transform.Normalization.Regression
 {
     /// <summary>
     /// Class representing the regression to be performed

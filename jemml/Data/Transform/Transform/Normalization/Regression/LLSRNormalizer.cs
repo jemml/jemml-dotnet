@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using jemml.Data.Record;
 using Newtonsoft.Json;
 
-namespace jemml.Data.Transform.Transform.Normalization
+namespace jemml.Data.Transform.Transform.Normalization.Regression
 {
     public class LLSRNormalizer : SampleTransform, Trainable
     {

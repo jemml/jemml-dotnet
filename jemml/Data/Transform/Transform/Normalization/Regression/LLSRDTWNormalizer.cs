@@ -7,7 +7,7 @@ using jemml.Data.Record;
 using jemml.Utilities;
 using Newtonsoft.Json;
 
-namespace jemml.Data.Transform.Transform.Normalization
+namespace jemml.Data.Transform.Transform.Normalization.Regression
 {
     public class LLSRDTWNormalizer : LLSRNormalizer
     {
