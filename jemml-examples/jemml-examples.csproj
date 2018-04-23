@@ -9,4 +9,12 @@
     <ProjectReference Include="..\jemml\jemml.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Biometric-based-Security-Systems\Chapter9\" />
+    <Folder Include="Machine-Learning-Techniques-for-Gait\Chapter3\" />
+    <Folder Include="Machine-Learning-Techniques-for-Gait\Chapter4\" />
+    <Folder Include="Machine-Learning-Techniques-for-Gait\Chapter5\" />
+    <Folder Include="Machine-Learning-Techniques-for-Gait\Chapter6\" />
+  </ItemGroup>
+
 </Project>
