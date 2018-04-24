@@ -17,4 +17,8 @@
     <Folder Include="Machine-Learning-Techniques-for-Gait\Chapter6\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="2.2.1" />
+  </ItemGroup>
+
 </Project>
