@@ -11,7 +11,7 @@ namespace jemml.Data.Record.Extractor
 
         public ATVSExtractor() : this(null) { }
 
-        protected override List<Tuple<double, double[]>> ExtractRows(Sample sample)
+        protected override List<Tuple<double, double[]>> ExtractRows(ISample sample)
         {
             List<Tuple<double, double[]>> atvsRows = new List<Tuple<double, double[]>>();
             foreach (Tuple<double, double[]> row in sample.GetDataRows())

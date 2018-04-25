@@ -14,7 +14,7 @@ namespace jemml.Data
     /// A sample set represents a processed dataset and the preprocessors used to arrive at its current state, as well as providing a means to process it further.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class SampleSet<T> : List<T> where T : Sample
+    public class SampleSet<T> : List<T> where T : ISample
     {
         // cross validated preprocessor head values
         protected Dictionary<int, Preprocessor> preprocessorHeads;
@@ -23,7 +23,7 @@ namespace jemml.Data
 
         protected SampleSet(List<T> samples, Dictionary<int, Preprocessor> preprocessorHeads = null, int? trainingSize = null) : base(samples)
         {
-            this.preprocessorHeads = preprocessorHeads == null ? new Dictionary<int, Preprocessor>() : preprocessorHeads;
+            this.preprocessorHeads = preprocessorHeads ?? new Dictionary<int, Preprocessor>();
             this.trainingSize = trainingSize;
         }
 
@@ -78,7 +78,7 @@ namespace jemml.Data
         /**
          * Get a a subset of the raw sample set with a smaller grouping of extracted columns (i.e. a column for average, minimum contour, etc)
          */
-        public SampleSet<T> GenerateSampleSubsets(params SubsetExtractor[] subsetExtractors)
+        public SampleSet<T> GenerateSampleSubsets(params ISubsetExtractor[] subsetExtractors)
         {
             if (subsetExtractors.Length < 1)
             {
@@ -117,7 +117,7 @@ namespace jemml.Data
         protected SampleSet<T> ApplyCrossValidated<P>(P preprocessor, Func<T, P, T> sampleProcessing, int xValidationStart, int xValidationLength) where P : Preprocessor
         {
             // you need to train your Trainable preprocessor externally if you aren't using cross validation (cross validation will apply its own training)
-            if (!IsCrossValidatedSampleSet() && preprocessor is Trainable && !((Trainable)preprocessor).IsTrained())
+            if (!IsCrossValidatedSampleSet() && preprocessor is ITrainable && !((ITrainable)preprocessor).IsTrained())
             {
                 throw new ArgumentException("Trainable preprocessor must be trained for non-cross validated sets");
             }
@@ -127,7 +127,7 @@ namespace jemml.Data
             // TODO - include imposterTrainingSize
             ParallelQuery<int> crossValidationRange = Enumerable.Range(xValidationStart, xValidationLength).AsParallel();
             Dictionary<int, Preprocessor> trainedPreprocessors = crossValidationRange.Select(x => new { x, preprocessorHead = preprocessor.Copy() })
-                .Select(p => new { p.x, trainablePreprocessor = p.preprocessorHead as Trainable, p.preprocessorHead })
+                .Select(p => new { p.x, trainablePreprocessor = p.preprocessorHead as ITrainable, p.preprocessorHead })
                 .Select(t => new { t.x, preprocessorHead = t.trainablePreprocessor != null && IsCrossValidatedSampleSet() ? t.trainablePreprocessor.Train<P>(SampleSetHelpers.GetSampleSetTrainingSamples(this, trainingSize.Value, t.x)) : t.preprocessorHead }) // only do training when cross validated
                 .Select(trained => new { trained.x, preprocessorHead = trained.preprocessorHead.SetPredecessor(preprocessorHeads.ContainsKey(trained.x) ? preprocessorHeads[trained.x] : null) }) // set the current preprocessor as the predecessor to the newly applied one for initializing the new SampleSet
                 .ToDictionary(trained => trained.x, trained => trained.preprocessorHead);
@@ -151,9 +151,9 @@ namespace jemml.Data
             return preprocessorHeads; // all preprocessors applied in the generation of this sample set (use recursive GetPredecessor() to get back to head)
         }
 
-        public List<Sample> AsSampleList()
+        public List<ISample> AsSampleList()
         {
-            return new List<Sample>(this.Cast<Sample>());
+            return new List<ISample>(this.Cast<ISample>());
         }
 
         public void WriteDataToCSV(string sampleFile)

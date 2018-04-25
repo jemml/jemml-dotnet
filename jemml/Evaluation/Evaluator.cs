@@ -18,7 +18,7 @@ namespace jemml.Evaluation
 
         // perform cross validated EER evaluation
         public static BiometricResult Evaluate<T, C>(SampleSet<T> sampleSet, C classifier, int trainingSize, int xValidationStart = 0, int xValidationLength = 1, double minInterval = DEFAULT_MIN_INTERVAL)
-            where T : Sample
+            where T : ISample
             where C : ClassifierFactory<T>
         {
             if (minInterval >= 0.5 || minInterval <= 0)
@@ -28,7 +28,7 @@ namespace jemml.Evaluation
             return Evaluate(sampleSet, classifier, trainingSize, minInterval, 0.5, new BiometricResult(0.5, null), xValidationStart, xValidationLength);
         }
 
-        private static BiometricResult Evaluate<T>(SampleSet<T> sampleSet, ClassifierFactory<T> classifier, int trainingSize, double minInterval, double interval, BiometricResult result, int xValidationStart, int xValidationLength) where T : Sample
+        private static BiometricResult Evaluate<T>(SampleSet<T> sampleSet, ClassifierFactory<T> classifier, int trainingSize, double minInterval, double interval, BiometricResult result, int xValidationStart, int xValidationLength) where T : ISample
         {
             if (interval < minInterval)
             {
@@ -41,7 +41,7 @@ namespace jemml.Evaluation
                 Tuple<ErrorRatePair, List<ErrorRatePair>> delta1 = CalculateErrorRate(sampleSet, classifier, trainingSize, (result.GetThreshold() - (interval / 2.0)), xValidationStart, xValidationLength);
                 Tuple<ErrorRatePair, List<ErrorRatePair>> delta2 = CalculateErrorRate(sampleSet, classifier, trainingSize, (result.GetThreshold() + (interval / 2.0)), xValidationStart, xValidationLength);
 
-                if (delta1.Item1.getErrorDelta() < delta2.Item1.getErrorDelta())
+                if (delta1.Item1.GetErrorDelta() < delta2.Item1.GetErrorDelta())
                 {
                     return Evaluate(sampleSet, classifier, trainingSize, minInterval, (interval / 2.0), new BiometricResult((result.GetThreshold() - (interval / 2.0)), delta1.Item2), xValidationStart, xValidationLength);
                 }
@@ -52,18 +52,18 @@ namespace jemml.Evaluation
             }
         }
 
-        public static BiometricResult Evaluate(ClassifierFactory<Sample> classifier, List<Sample> testingSamples)
+        public static BiometricResult Evaluate(ClassifierFactory<ISample> classifier, List<ISample> testingSamples)
         {
             return Evaluate(classifier.GetInstance(0), testingSamples);
         }
 
         // perform EER evaluation on provided testing samples
-        public static BiometricResult Evaluate(ClassifierInstance classifier, List<Sample> testingSamples, double minInterval = DEFAULT_MIN_INTERVAL)
+        public static BiometricResult Evaluate(ClassifierInstance classifier, List<ISample> testingSamples, double minInterval = DEFAULT_MIN_INTERVAL)
         {
             return Evaluate(classifier, testingSamples, minInterval, 0.5, new BiometricResult(0.5, null));
         }
 
-        private static BiometricResult Evaluate(ClassifierInstance classifier, List<Sample> testingSamples, double minInterval, double interval, BiometricResult result)
+        private static BiometricResult Evaluate(ClassifierInstance classifier, List<ISample> testingSamples, double minInterval, double interval, BiometricResult result)
         {
             if (interval < minInterval)
             {
@@ -76,11 +76,11 @@ namespace jemml.Evaluation
                 ErrorRatePair delta1 = CalculateErrorRate(classifier, testingSamples, (result.GetThreshold() - (interval / 2.0)));
                 ErrorRatePair delta2 = CalculateErrorRate(classifier, testingSamples, (result.GetThreshold() + (interval / 2.0)));
 
-                Console.WriteLine("delta1 : " + delta1.getFAR() + " " + delta1.getFRR() + " \n " + delta2.getFAR() + " " + delta2.getFRR());
+                Console.WriteLine("delta1 : " + delta1.GetFAR() + " " + delta1.GetFRR() + " \n " + delta2.GetFAR() + " " + delta2.GetFRR());
                 Console.WriteLine("threshold: " + result.GetThreshold());
-                Console.WriteLine("errorDelta1: " + delta1.getErrorDelta() + " errorDelta2: " + delta2.getErrorDelta());
+                Console.WriteLine("errorDelta1: " + delta1.GetErrorDelta() + " errorDelta2: " + delta2.GetErrorDelta());
 
-                if (delta1.getErrorDelta() < delta2.getErrorDelta())
+                if (delta1.GetErrorDelta() < delta2.GetErrorDelta())
                 {
                     Console.WriteLine("Choose delta1");
                     return Evaluate(classifier, testingSamples, minInterval, (interval / 2.0), new BiometricResult((result.GetThreshold() - (interval / 2.0)), new List<ErrorRatePair> { delta1 }));
@@ -93,7 +93,7 @@ namespace jemml.Evaluation
             }
         }
 
-        private static Tuple<ErrorRatePair, List<ErrorRatePair>> CalculateErrorRate<T>(SampleSet<T> sampleSet, ClassifierFactory<T> classifier, int trainingSize, double threshold, int xValidationStart, int xValidationLength) where T : Sample
+        private static Tuple<ErrorRatePair, List<ErrorRatePair>> CalculateErrorRate<T>(SampleSet<T> sampleSet, ClassifierFactory<T> classifier, int trainingSize, double threshold, int xValidationStart, int xValidationLength) where T : ISample
         {
             // test classifier instances with testing samples and threshold asynchronously to get cross validated result
             List<ErrorRatePair> errorRates = Enumerable.Range(xValidationStart, xValidationLength).AsParallel()
@@ -108,14 +108,14 @@ namespace jemml.Evaluation
             return new Tuple<ErrorRatePair, List<ErrorRatePair>>(totalError, errorRates);
         }
 
-        public static ErrorRatePair CalculateErrorRate(ClassifierInstance classifier, List<Sample> testingSamples, double threshold)
+        public static ErrorRatePair CalculateErrorRate(ClassifierInstance classifier, List<ISample> testingSamples, double threshold)
         {
             Tuple<int, int> farResults = CalculateFAR(classifier, testingSamples, threshold);
             Tuple<int, int> frrResults = CalculateFRR(classifier, testingSamples, threshold);
             return new ErrorRatePair(farResults.Item1, farResults.Item2, frrResults.Item1, frrResults.Item2);
         }
 
-        private static Tuple<int, int> CalculateFAR(ClassifierInstance classifier, List<Sample> testingSamples, double threshold)
+        private static Tuple<int, int> CalculateFAR(ClassifierInstance classifier, List<ISample> testingSamples, double threshold)
         {
             string[] identifiers = classifier.GetTrainedIdentifiers();
             // for each identifier find the samples that correctly match the identifier given the threshold
@@ -136,7 +136,7 @@ namespace jemml.Evaluation
             return new Tuple<int, int>(result.Accepted, (result.Accepted + result.Rejected));
         }
 
-        private static Tuple<int, int> CalculateFRR(ClassifierInstance classifier, List<Sample> testingSamples, double threshold)
+        private static Tuple<int, int> CalculateFRR(ClassifierInstance classifier, List<ISample> testingSamples, double threshold)
         {
             string[] identifiers = classifier.GetTrainedIdentifiers();
             // for each identifier find the samples taht incorrectly match the identifier given the threshold

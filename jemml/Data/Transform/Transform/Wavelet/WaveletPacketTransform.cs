@@ -9,7 +9,7 @@ namespace jemml.Data.Transform.Transform.Wavelet
     {
         protected WaveletPacketTransform(Preprocessor preprocessor) : base(preprocessor) { }
 
-        public WaveletPacket GetWaveletPacketDecomposition(Sample sample, int column, Wavelet wavelet, int toLevel)
+        public WaveletPacket GetWaveletPacketDecomposition(ISample sample, int column, Wavelet wavelet, int toLevel)
         {
             WaveletPacket top = new WaveletPacket(sample.GetDataRows(column), sample.GetIdentifier());
             BuildWaveletTree(top, wavelet, toLevel);

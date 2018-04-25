@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace jemml.Classification.SVM
 {
-    public class SVMClassifier : Classifier
+    public class SVMClassifier : IClassifier
     {
         static SVMClassifier()
         {
@@ -34,12 +34,12 @@ namespace jemml.Classification.SVM
             this.model = model;
         }
 
-        public SVMClassifier(double C, double gamma, List<Sample> trainingSamples, string[] trainingIdentifiers)
+        public SVMClassifier(double C, double gamma, List<ISample> trainingSamples, string[] trainingIdentifiers)
         {
             Train(C, gamma, trainingSamples, trainingIdentifiers);
         }
 
-        protected void Train(double C, double gamma, List<Sample> trainingSamples, string[] trainingIdentifiers)
+        protected void Train(double C, double gamma, List<ISample> trainingSamples, string[] trainingIdentifiers)
         {
             // generate a numeric mapping of our string identifiers to unique numeric values
             identifiersMap = trainingIdentifiers.Select((identifier, index) => new { identifier, index }).ToDictionary(id => id.identifier, id => id.index);
@@ -49,7 +49,7 @@ namespace jemml.Classification.SVM
             model = svmNetwork.Model;
         }
 
-        protected ProbabilitySupportVectorMachine TrainSVM(double C, double gamma, List<Sample> trainingSamples, Func<Sample, double> idealFunction)
+        protected ProbabilitySupportVectorMachine TrainSVM(double C, double gamma, List<ISample> trainingSamples, Func<ISample, double> idealFunction)
         {
             // duplicate the training dataset for better cross validation by LIBSVM probability generator (see LIBSVM documentation)
             List<double[]> inputSamples = trainingSamples.Select(sample => sample.GetDimensions()).ToList();
@@ -68,10 +68,12 @@ namespace jemml.Classification.SVM
             ProbabilitySupportVectorMachine svmNetwork = new ProbabilitySupportVectorMachine(trainingSamples[0].GetDimensionCount(), false, 0.00000001);
 
             // train the SVM classifier with the provided C and gamma
-            SVMTrain trainedSVM = new SVMTrain(svmNetwork, trainingData);
-            trainedSVM.Fold = 0;
-            trainedSVM.Gamma = gamma;
-            trainedSVM.C = C;
+            SVMTrain trainedSVM = new SVMTrain(svmNetwork, trainingData)
+            {
+                Fold = 0,
+                Gamma = gamma,
+                C = C
+            };
 
             trainedSVM.Iteration();
 

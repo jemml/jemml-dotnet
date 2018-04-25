@@ -20,7 +20,7 @@ namespace jemml.Data.Record.Extractor
         // interval will be used to calculate time for padded rows
         public PointSetExtractor(int pointRows) : this(pointRows, null) { }
 
-        protected override List<Tuple<double, double[]>> ExtractRows(Sample sample)
+        protected override List<Tuple<double, double[]>> ExtractRows(ISample sample)
         {
             List<Tuple<double, double[]>> pointData = new List<Tuple<double, double[]>>();
 

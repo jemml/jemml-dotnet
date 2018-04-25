@@ -24,7 +24,7 @@ namespace jemml.Data.Transform.DimensionalityReduction
 
         public FeatureIndexReduction(int[] extractIndexes) : this(extractIndexes, null) { }
 
-        protected override double[] Reduce(Sample sample)
+        protected override double[] Reduce(ISample sample)
         {
             double[] originalDimensions = sample.GetDimensions();
             if (originalDimensions.Length < extractIndexes.Max())

@@ -24,7 +24,7 @@ namespace jemml.Data
             this.predecessor = predecessor;
         }
 
-        public Sample Evaluate(Sample sample)
+        public ISample Evaluate(ISample sample)
         {
             if (GetPredecessor() != null)
             {
@@ -55,7 +55,7 @@ namespace jemml.Data
             return predecessor;
         }
 
-        protected abstract Sample Process(Sample sample);
+        protected abstract ISample Process(ISample sample);
 
         public Preprocessor Copy()
         {

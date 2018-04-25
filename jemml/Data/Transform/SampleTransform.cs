@@ -13,7 +13,7 @@ namespace jemml.Data.Transform
     {
         protected SampleTransform(Preprocessor predecessor) : base(predecessor) { }
 
-        public Sample ApplyTransform(Sample sample)
+        public ISample ApplyTransform(ISample sample)
         {
             int[] columns = GetColumns();
             if (columns.Length >= 0 && columns.Where(i => i > sample.GetColumnCount() - 1 || i < 0).Count() > 0)
@@ -23,13 +23,13 @@ namespace jemml.Data.Transform
             return sample.AcceptVisitor(new SampleDataVisitor(GetTransformedRows(sample, GetAppliedColumns(columns, sample.GetColumnCount())), RecalculateDuration()));
         }
 
-        protected abstract List<Tuple<double, double[]>> GetTransformedRows(Sample sample, int[] columns);
+        protected abstract List<Tuple<double, double[]>> GetTransformedRows(ISample sample, int[] columns);
 
         protected abstract int[] GetColumns();
 
         protected abstract bool RecalculateDuration();
 
-        protected override Sample Process(Sample sample)
+        protected override ISample Process(ISample sample)
         {
             return ApplyTransform(sample);
         }
@@ -39,7 +39,7 @@ namespace jemml.Data.Transform
             return columns.Length > 0 ? columns : Enumerable.Range(0, columnCount).ToArray(); // default to applying to all columns if no particular column provided
         }
 
-        protected List<Tuple<double, double[]>> TransformData(Sample sample, Func<double, double> dataTransformation, int[] columns)
+        protected List<Tuple<double, double[]>> TransformData(ISample sample, Func<double, double> dataTransformation, int[] columns)
         {
             return TransformData(sample, (interval, i) => interval, (value, i, j) => dataTransformation.Invoke(value), columns);
         }
@@ -49,7 +49,7 @@ namespace jemml.Data.Transform
             return TransformRow(columns, 0, (value, i, j) => dataTransformation.Invoke(value), currentValues);
         }
 
-        protected List<Tuple<double, double[]>> TransformData(Sample sample, Func<double, int, double> dataTransformation, int[] columns)
+        protected List<Tuple<double, double[]>> TransformData(ISample sample, Func<double, int, double> dataTransformation, int[] columns)
         {
             return TransformData(sample, (interval, i) => interval, (value, i, j) => dataTransformation.Invoke(value, j), columns);
         }
@@ -59,7 +59,7 @@ namespace jemml.Data.Transform
             return TransformRow(columns, 0, (value, i, j) => transformation.Invoke(value, j), currentValues);
         }
 
-        protected List<Tuple<double, double[]>> TransformData(Sample sample, Func<double, int, double> intervalTransformation, Func<double, int, int, double> dataTransformation, int[] columns)
+        protected List<Tuple<double, double[]>> TransformData(ISample sample, Func<double, int, double> intervalTransformation, Func<double, int, int, double> dataTransformation, int[] columns)
         {
             List<Tuple<double, double[]>> dataRows = sample.GetDataRows();
             List<Tuple<double, double[]>> transformedData = new List<Tuple<double, double[]>>();

@@ -16,13 +16,13 @@ namespace jemml.Classification.MLP
         [JsonConstructor]
         MultiMLPClassifier() { /* for serialization */ }
 
-        public MultiMLPClassifier(int hiddenLayers, NetworkTrain networkTrainer, double maxIterations, double minError, List<Sample> trainingSamples, string[] trainingIdentifiers) :
+        public MultiMLPClassifier(int hiddenLayers, INetworkTrain networkTrainer, double maxIterations, double minError, List<ISample> trainingSamples, string[] trainingIdentifiers) :
             base(hiddenLayers, networkTrainer, maxIterations, minError, trainingSamples, trainingIdentifiers)
         {
             // training initiated by base class
         }
 
-        protected override void Train(int hiddenLayers, NetworkTrain networkTrainer, double maxIterations, double minError, List<Sample> trainingSamples, string[] trainingIdentifiers)
+        protected override void Train(int hiddenLayers, INetworkTrain networkTrainer, double maxIterations, double minError, List<ISample> trainingSamples, string[] trainingIdentifiers)
         {
             networks = trainingIdentifiers.AsParallel().Select(identifier => new {
                 identifier,

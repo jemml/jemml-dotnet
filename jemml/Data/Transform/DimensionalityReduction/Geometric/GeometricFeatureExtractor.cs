@@ -23,7 +23,7 @@ namespace jemml.Data.Transform.DimensionalityReduction.Geometric
             return this;
         }
 
-        public double[] ExtractFrom(Sample sample)
+        public double[] ExtractFrom(ISample sample)
         {
             return templates.AsParallel().AsOrdered().SelectMany(template => template.Template.ExtractFrom(sample, template.Columns)).ToArray();
         }

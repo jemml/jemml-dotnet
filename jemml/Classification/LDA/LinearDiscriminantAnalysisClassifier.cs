@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace jemml.Classification.LDA
 {
-    public class LinearDiscriminantAnalysisClassifier : Classifier
+    public class LinearDiscriminantAnalysisClassifier : IClassifier
     {
         [JsonProperty]
         protected Dictionary<string, int> identifiersMap;
@@ -27,12 +27,12 @@ namespace jemml.Classification.LDA
         [JsonConstructor]
         LinearDiscriminantAnalysisClassifier() { /* for serialization */ }
 
-        public LinearDiscriminantAnalysisClassifier(LDAConfig config, List<Sample> trainingSamples, string[] trainingIdentifiers)
+        public LinearDiscriminantAnalysisClassifier(LDAConfig config, List<ISample> trainingSamples, string[] trainingIdentifiers)
         {
             Train(config, trainingSamples, trainingIdentifiers);
         }
 
-        protected void Train(LDAConfig config, List<Sample> trainingSamples, string[] trainingIdentifiers)
+        protected void Train(LDAConfig config, List<ISample> trainingSamples, string[] trainingIdentifiers)
         {
             // store confige
             this.config = config;

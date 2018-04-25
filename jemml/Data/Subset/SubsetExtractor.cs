@@ -5,8 +5,8 @@ using jemml.Data.Record;
 
 namespace jemml.Data.Subset
 {
-    public interface SubsetExtractor
+    public interface ISubsetExtractor
     {
-        List<double> Extract(Sample sample);
+        List<double> Extract(ISample sample);
     }
 }

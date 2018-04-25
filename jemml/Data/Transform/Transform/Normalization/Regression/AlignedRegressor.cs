@@ -17,7 +17,7 @@ namespace jemml.Data.Transform.Transform.Normalization.Regression
             List<AlignedRegressionColumn> alignedCalibratedSet = calibratedSet.Cast<AlignedRegressionColumn>().ToList();
             // standardize row indices with positions from 0 - 1 to give a base for calculating the regression
             double[] phaseSlopes = alignedCalibratedSet.SelectMany(calibratedColumn => calibratedColumn.StandardizedIntervals.Select((standardInterval, positionIndex) => new { positionIndex, duration = calibratedColumn.Duration, interval = standardInterval }))
-                .GroupBy(r => r.positionIndex, r => new { duration = r.duration, interval = r.interval })
+                .GroupBy(r => r.positionIndex, r => new { r.duration, r.interval })
                 .Select(r => GenerateRegression(r.Select(d => d.duration).ToArray(), r.Select(i => i.interval).ToArray())).ToArray();
             phaseSlopesByColumn.Add(column, phaseSlopes);
         }

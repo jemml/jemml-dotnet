@@ -5,7 +5,7 @@ using jemml.Data.Record;
 
 namespace jemml.Classification.SVM
 {
-    public class SVMClassifierFactory<T> : ClassifierFactory<T> where T : Sample
+    public class SVMClassifierFactory<T> : ClassifierFactory<T> where T : ISample
     {
         protected double C;
         protected double gamma;
@@ -16,7 +16,7 @@ namespace jemml.Classification.SVM
             this.C = C;
         }
 
-        public override ClassifierInstance CreateInstance(List<Sample> trainingSamples, double[] featureScaling, double[] featureShift, string[] trainingIdentifiers)
+        public override ClassifierInstance CreateInstance(List<ISample> trainingSamples, double[] featureScaling, double[] featureShift, string[] trainingIdentifiers)
         {
             SVMClassifier classifier = new SVMClassifier(C, gamma, trainingSamples, trainingIdentifiers);
             return new ClassifierInstance(classifier, featureScaling, featureShift, trainingIdentifiers);

@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace jemml.Data.Transform.DimensionalityReduction.PCA
 {
-    public class PrincipalComponentAnalysisReduction : DimensionalityReduction, Trainable
+    public class PrincipalComponentAnalysisReduction : DimensionalityReduction, ITrainable
     {
         [JsonProperty]
         protected int numberOfOutputs;
@@ -33,7 +33,7 @@ namespace jemml.Data.Transform.DimensionalityReduction.PCA
             return pca != null;
         }
 
-        public P Train<P>(List<Sample> trainingSamples) where P : Preprocessor
+        public P Train<P>(List<ISample> trainingSamples) where P : Preprocessor
         {
             this.pca = new InternalPrincipalComponentAnalysis((PrincipalComponentMethod)method, numberOfOutputs: numberOfOutputs, whiten: true);
 
@@ -43,7 +43,7 @@ namespace jemml.Data.Transform.DimensionalityReduction.PCA
             return this as P;
         }
 
-        protected override double[] Reduce(Sample sample)
+        protected override double[] Reduce(ISample sample)
         {
             return pca.Transform(sample.GetDimensions());
         }

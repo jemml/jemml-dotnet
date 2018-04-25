@@ -17,7 +17,7 @@ namespace jemml.Data.Transform.Transform.Normalization.Regression
             // take the regression with all points per user standardized around a minimum of (0, 0) (all we care about is the slope anyway)
             // group by row index for row-based regression
             double[] amplitudeSlopes = calibratedSet.SelectMany(calibratedColumn => calibratedColumn.GetRows().Select((row, rowIndex) => new { rowIndex, duration = calibratedColumn.Duration, value = row }))
-                .GroupBy(r => r.rowIndex, r => new { duration = r.duration, value = r.value })
+                .GroupBy(r => r.rowIndex, r => new { r.duration, r.value })
                 .Select(r => GenerateRegression(r.Select(d => d.duration).ToArray(), r.Select(v => v.value).ToArray())).ToArray();
 
             amplitudeSlopesByColumn.Add(column, amplitudeSlopes);

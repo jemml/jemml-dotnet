@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace jemml.Data.Transform.Transform.Wavelet
 {
-    public class OptimalWaveletPacketTransform : WaveletPacketTransform, Trainable
+    public class OptimalWaveletPacketTransform : WaveletPacketTransform, ITrainable
     {
         [JsonProperty]
         private int[] columns;
@@ -43,7 +43,7 @@ namespace jemml.Data.Transform.Transform.Wavelet
             return optimalSubspace != null;
         }
 
-        public P Train<P>(List<Sample> trainingSamples) where P : Preprocessor
+        public P Train<P>(List<ISample> trainingSamples) where P : Preprocessor
         {
             List<int> trainingRows = trainingSamples.Select(sample => sample.GetDataRows().Count).Distinct().ToList();
             if (trainingRows.Count != 1)
@@ -56,7 +56,7 @@ namespace jemml.Data.Transform.Transform.Wavelet
             return this as P;
         }
 
-        protected List<WaveletSubspace>[] GenerateOptimalWaveletPacketDecomposition(List<Sample> trainingSet, int[] columns)
+        protected List<WaveletSubspace>[] GenerateOptimalWaveletPacketDecomposition(List<ISample> trainingSet, int[] columns)
         {
             List<WaveletSubspace>[] columnOptimalSubspaces = new List<WaveletSubspace>[columns.Length];
             for (int j = 0; j < trainingColumnCount; j++)
@@ -70,7 +70,7 @@ namespace jemml.Data.Transform.Transform.Wavelet
             return columnOptimalSubspaces;
         }
 
-        protected List<WaveletSubspace> GetColumnOptimalWaveletPacketDecomposition(List<Sample> trainingSet, int column)
+        protected List<WaveletSubspace> GetColumnOptimalWaveletPacketDecomposition(List<ISample> trainingSet, int column)
         {
             // perform the wavelet packet decomposition of the data rows for the given column
             List<WaveletPacket> packetList = trainingSet.Select(sample => GetWaveletPacketDecomposition(sample, column, wavelet, toLevel)).ToList();
@@ -80,7 +80,7 @@ namespace jemml.Data.Transform.Transform.Wavelet
             return fcmTop.GetOptimalSubspaceList();
         }
 
-        protected override List<Tuple<double, double[]>> GetTransformedRows(Sample sample, int[] columns)
+        protected override List<Tuple<double, double[]>> GetTransformedRows(ISample sample, int[] columns)
         {
             if (sample.GetDataRows().Count != trainingRowCount)
             {

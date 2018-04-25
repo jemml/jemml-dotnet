@@ -20,12 +20,12 @@ namespace jemml.Data.Transform.Transform.Normalization
 
         public L2Normalizer(params int[] columns) : this(null, columns) { }
 
-        protected double GetEuclideanDistance(Sample sample, int[] columns)
+        protected double GetEuclideanDistance(ISample sample, int[] columns)
         {
             return Math.Sqrt(sample.GetAllValuesForColumns(columns).Sum(value => Math.Pow(value, 2)));
         }
 
-        protected override List<Tuple<double, double[]>> GetTransformedRows(Sample sample, int[] columns)
+        protected override List<Tuple<double, double[]>> GetTransformedRows(ISample sample, int[] columns)
         {
             return TransformData(sample, value => value / GetEuclideanDistance(sample, columns), columns);
         }

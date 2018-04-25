@@ -15,7 +15,7 @@ namespace jemml.Data.Transform.Transform.Normalization.Regression
             : base(rows, identifier, duration)
         {
             RowIndices = rowIndices;
-            StandardizedIntervals = standardizedIntervals == null ? GetStandardIntervals(RowIndices) : standardizedIntervals;
+            StandardizedIntervals = standardizedIntervals ?? GetStandardIntervals(RowIndices);
             IsTemplate = isTemplate;
         }
 

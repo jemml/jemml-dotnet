@@ -16,7 +16,7 @@ namespace jemml.Utilities
             }
         }
 
-        public static void WithEqualNumberOfDimensions(List<Sample> samples)
+        public static void WithEqualNumberOfDimensions(List<ISample> samples)
         {
             int[] dimensions = samples.Select(sample => sample.GetDimensionCount()).Distinct().ToArray();
             if (dimensions.Length != 1)

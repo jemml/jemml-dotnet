@@ -13,7 +13,7 @@ namespace jemml.Classification
     public class ClassifierInstance
     {
         [JsonProperty]
-        protected Classifier classifier;
+        protected IClassifier classifier;
         [JsonProperty]
         protected double[] featureScaling;
         [JsonProperty]
@@ -21,7 +21,7 @@ namespace jemml.Classification
         [JsonProperty]
         protected string[] trainedIdentifiers;
 
-        public ClassifierInstance(Classifier classifier, double[] featureScaling, double[] featureShift, string[] trainedIdentifiers)
+        public ClassifierInstance(IClassifier classifier, double[] featureScaling, double[] featureShift, string[] trainedIdentifiers)
         {
             this.classifier = classifier;
             this.featureScaling = featureScaling;

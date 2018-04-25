@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace jemml.Data.Transform.Transform.Normalization.Regression
 {
-    public class LLSRNormalizer : SampleTransform, Trainable
+    public class LLSRNormalizer : SampleTransform, ITrainable
     {
         [JsonProperty]
         protected int[] columns;
@@ -39,7 +39,7 @@ namespace jemml.Data.Transform.Transform.Normalization.Regression
             return AmplitudeSlopes != null;
         }
 
-        public virtual P Train<P>(List<Sample> trainingSamples) where P : Preprocessor
+        public virtual P Train<P>(List<ISample> trainingSamples) where P : Preprocessor
         {
             InitializeTimeAndCountProperties(trainingSamples, columns);
             Dictionary<int, List<RegressionColumn>> trainingRegressionColumns = GenerateRegressionColumns(trainingSamples, trainingColumnCount);
@@ -48,7 +48,7 @@ namespace jemml.Data.Transform.Transform.Normalization.Regression
             return this as P;
         }
 
-        protected void InitializeTimeAndCountProperties(List<Sample> trainingSet, int[] columns)
+        protected void InitializeTimeAndCountProperties(List<ISample> trainingSet, int[] columns)
         {
             List<int> trainingRows = trainingSet.Select(sample => sample.GetDataRows().Count).Distinct().ToList();
             if (trainingRows.Count != 1)
@@ -61,7 +61,7 @@ namespace jemml.Data.Transform.Transform.Normalization.Regression
             this.standardTime = trainingSet.Select(sample => sample.GetDuration().Value).Average();
         }
 
-        private Dictionary<int, List<RegressionColumn>> GenerateRegressionColumns(List<Sample> trainingSet, int trainingColumnCount)
+        private Dictionary<int, List<RegressionColumn>> GenerateRegressionColumns(List<ISample> trainingSet, int trainingColumnCount)
         {
             // convert sample list to regression list organized by column
             return Enumerable.Range(0, trainingColumnCount)
@@ -105,7 +105,7 @@ namespace jemml.Data.Transform.Transform.Normalization.Regression
             return regressor;
         }
 
-        protected override List<Tuple<double, double[]>> GetTransformedRows(Sample sample, int[] columns)
+        protected override List<Tuple<double, double[]>> GetTransformedRows(ISample sample, int[] columns)
         {
             if (!sample.GetDuration().HasValue)
             {

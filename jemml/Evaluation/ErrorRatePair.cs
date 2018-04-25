@@ -22,44 +22,44 @@ namespace jemml.Evaluation
             this.totalRejectedTestCount = totalRejectedTestCount;
         }
 
-        public int getFalseAcceptedCount()
+        public int GetFalseAcceptedCount()
         {
             return falseAcceptedCount;
         }
 
-        public int getTotalAcceptedTestCount()
+        public int GetTotalAcceptedTestCount()
         {
             return totalAcceptedTestCount;
         }
 
-        public int getFalseRejectedCount()
+        public int GetFalseRejectedCount()
         {
             return falseRejectedCount;
         }
 
-        public int getTotalRejectedTestCount()
+        public int GetTotalRejectedTestCount()
         {
             return totalRejectedTestCount;
         }
 
-        public double getFAR()
+        public double GetFAR()
         {
             return (double)falseAcceptedCount / totalAcceptedTestCount;
         }
 
-        public double getFRR()
+        public double GetFRR()
         {
             return (double)falseRejectedCount / totalRejectedTestCount;
         }
 
-        public double getErrorDelta()
+        public double GetErrorDelta()
         {
-            return Math.Abs(getFAR() - getFRR());
+            return Math.Abs(GetFAR() - GetFRR());
         }
 
         public static ErrorRatePair operator +(ErrorRatePair e1, ErrorRatePair e2)
         {
-            return new ErrorRatePair(e1.getFalseAcceptedCount() + e2.getFalseAcceptedCount(), e1.getTotalAcceptedTestCount() + e2.getTotalAcceptedTestCount(), e1.getFalseRejectedCount() + e2.getFalseRejectedCount(), e1.getTotalRejectedTestCount() + e2.getTotalRejectedTestCount());
+            return new ErrorRatePair(e1.GetFalseAcceptedCount() + e2.GetFalseAcceptedCount(), e1.GetTotalAcceptedTestCount() + e2.GetTotalAcceptedTestCount(), e1.GetFalseRejectedCount() + e2.GetFalseRejectedCount(), e1.GetTotalRejectedTestCount() + e2.GetTotalRejectedTestCount());
         }
     }
 }

@@ -8,16 +8,16 @@ namespace jemml.Data.Record
     {
         protected SampleExtractor(Preprocessor predecessor) : base(predecessor) { }
 
-        public Sample Extract(Sample sample)
+        public ISample Extract(ISample sample)
         {
-            return sample.AcceptVisitor<Sample>(new SampleDataVisitor(ExtractRows(sample), RecalculateDuration()));
+            return sample.AcceptVisitor<ISample>(new SampleDataVisitor(ExtractRows(sample), RecalculateDuration()));
         }
 
-        protected abstract List<Tuple<double, double[]>> ExtractRows(Sample sample);
+        protected abstract List<Tuple<double, double[]>> ExtractRows(ISample sample);
 
         protected abstract bool RecalculateDuration();
 
-        protected override Sample Process(Sample sample)
+        protected override ISample Process(ISample sample)
         {
             return this.Extract(sample);
         }

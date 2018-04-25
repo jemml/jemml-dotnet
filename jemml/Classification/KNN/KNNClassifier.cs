@@ -8,17 +8,17 @@ using Newtonsoft.Json;
 
 namespace jemml.Classification.KNN
 {
-    public class KNNClassifier : Classifier
+    public class KNNClassifier : IClassifier
     {
         [JsonProperty]
         public int K { get; protected set; }
         [JsonProperty]
-        protected List<Sample> trainingSamples;
+        protected List<ISample> trainingSamples;
 
         [JsonConstructor]
         KNNClassifier() { /* for serialization */ }
 
-        public KNNClassifier(int K, List<Sample> trainingSamples)
+        public KNNClassifier(int K, List<ISample> trainingSamples)
         {
             if (K <= 0 || K >= trainingSamples.Count)
             {

@@ -20,12 +20,12 @@ namespace jemml.Data.Transform.Transform.Normalization
 
         public L1Normalizer(params int[] columns) : this(null, columns) { }
 
-        protected double GetAbsoluteSum(Sample sample, int[] columns)
+        protected double GetAbsoluteSum(ISample sample, int[] columns)
         {
             return sample.GetAllValuesForColumns(columns).Sum(value => Math.Abs(value)); // sum the absolute value of each column value
         }
 
-        protected override List<Tuple<double, double[]>> GetTransformedRows(Sample sample, int[] columns)
+        protected override List<Tuple<double, double[]>> GetTransformedRows(ISample sample, int[] columns)
         {
             return TransformData(sample, value => value / GetAbsoluteSum(sample, columns), columns);
         }

@@ -11,7 +11,7 @@ namespace jemml.Data.Transform.Transform.Spectral
     {
         protected FourierTransform(Preprocessor predecessor) : base(predecessor) { }
 
-        protected Complex[][] GetComplexDataRows(Sample sample)
+        protected Complex[][] GetComplexDataRows(ISample sample)
         {
             Complex[][] dataRows = new Complex[sample.GetColumnCount()][];
             for (int column = 0; column < sample.GetColumnCount(); column++)

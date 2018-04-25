@@ -17,7 +17,10 @@ namespace jemml.Classification.SVM
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             SVMModel dmodel = serializer.Deserialize<SVMModel>(reader);
-            svm_model model = new svm_model();
+            svm_model model = new svm_model()
+            {
+                SV = dmodel.SV
+            };
             model.SV = dmodel.SV;
             DataHelpers.SetFieldValue<int>(model, "l", dmodel.l);
             DataHelpers.SetFieldValue<int[]>(model, "label", dmodel.label);

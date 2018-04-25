@@ -5,7 +5,7 @@ using jemml.Data.Record;
 
 namespace jemml.Classification.KNN
 {
-    public class KNNClassifierFactory<T> : ClassifierFactory<T> where T : Sample
+    public class KNNClassifierFactory<T> : ClassifierFactory<T> where T : ISample
     {
         public int K { get; protected set; }
 
@@ -14,7 +14,7 @@ namespace jemml.Classification.KNN
             this.K = K;
         }
 
-        public override ClassifierInstance CreateInstance(List<Sample> trainingSamples, double[] featureScaling, double[] featureShift, string[] trainingIdentifiers)
+        public override ClassifierInstance CreateInstance(List<ISample> trainingSamples, double[] featureScaling, double[] featureShift, string[] trainingIdentifiers)
         {
             KNNClassifier classifier = new KNNClassifier(K, trainingSamples);
             return new ClassifierInstance(classifier, featureScaling, featureShift, trainingIdentifiers);

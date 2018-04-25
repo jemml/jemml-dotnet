@@ -10,19 +10,19 @@ namespace jemml.Data.Transform.DimensionalityReduction
     {
         protected DimensionalityReduction(Preprocessor predecessor) : base(predecessor) { }
 
-        public Sample ApplyReduction(Sample sample)
+        public ISample ApplyReduction(ISample sample)
         {
             return sample.AcceptVisitor(new SampleDataVisitor(GetReducedDimensions(sample), false));
         }
 
-        protected List<Tuple<double, double[]>> GetReducedDimensions(Sample sample)
+        protected List<Tuple<double, double[]>> GetReducedDimensions(ISample sample)
         {
             return Reduce(sample).Select((dimension, i) => new Tuple<double, double[]>(i, new double[] { dimension })).ToList();
         }
 
-        protected abstract double[] Reduce(Sample sample);
+        protected abstract double[] Reduce(ISample sample);
 
-        protected override Sample Process(Sample sample)
+        protected override ISample Process(ISample sample)
         {
             return ApplyReduction(sample);
         }

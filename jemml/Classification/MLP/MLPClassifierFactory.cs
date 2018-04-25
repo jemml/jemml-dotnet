@@ -5,15 +5,15 @@ using jemml.Data.Record;
 
 namespace jemml.Classification.MLP
 {
-    public class MLPClassifierFactory<T> : ClassifierFactory<T> where T : Sample
+    public class MLPClassifierFactory<T> : ClassifierFactory<T> where T : ISample
     {
         protected int hiddenLayerNodes;
-        protected NetworkTrain networkTrainer;
+        protected INetworkTrain networkTrainer;
         protected double maxIterations;
         protected double minError;
         protected MLPNetworkConfig config;
 
-        public MLPClassifierFactory(int hiddenLayerNodes, NetworkTrain networkTrainer, double maxIterations = 100000, double minError = 0.0000001, MLPNetworkConfig config = MLPNetworkConfig.ManyToOne)
+        public MLPClassifierFactory(int hiddenLayerNodes, INetworkTrain networkTrainer, double maxIterations = 100000, double minError = 0.0000001, MLPNetworkConfig config = MLPNetworkConfig.ManyToOne)
             : base(-1, 1)
         {
             this.hiddenLayerNodes = hiddenLayerNodes;
@@ -23,7 +23,7 @@ namespace jemml.Classification.MLP
             this.config = config;
         }
 
-        public override ClassifierInstance CreateInstance(List<Sample> trainingSamples, double[] featureScaling, double[] featureShift, string[] trainingIdentifiers)
+        public override ClassifierInstance CreateInstance(List<ISample> trainingSamples, double[] featureScaling, double[] featureShift, string[] trainingIdentifiers)
         {
             if (config == MLPNetworkConfig.ManyToOne)
             {

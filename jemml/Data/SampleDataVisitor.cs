@@ -5,7 +5,7 @@ using jemml.Data.Record;
 
 namespace jemml.Data
 {
-    public class SampleDataVisitor : SampleVisitor<Sample>
+    public class SampleDataVisitor : ISampleVisitor<ISample>
     {
         private List<Tuple<double, double[]>> subsetRows;
         private bool recalculateDuration;
@@ -16,7 +16,7 @@ namespace jemml.Data
             this.recalculateDuration = recalculateDuration;
         }
 
-        public Sample Accept(StandardSample sample)
+        public ISample Accept(StandardSample sample)
         {
             if (recalculateDuration)
             {
@@ -28,7 +28,7 @@ namespace jemml.Data
             }
         }
 
-        public Sample Accept(CrossValidatedSample sample)
+        public ISample Accept(CrossValidatedSample sample)
         {
             if (recalculateDuration)
             {

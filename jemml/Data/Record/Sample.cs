@@ -7,7 +7,7 @@ namespace jemml.Data.Record
     /// <summary>
     /// A sample represents a single record of data in a larger dataset, also see SampleSet
     /// </summary>
-    public interface Sample
+    public interface ISample
     {
         string GetIdentifier();
 
@@ -29,7 +29,7 @@ namespace jemml.Data.Record
 
         double? GetDuration();
 
-        T AcceptVisitor<T>(SampleVisitor<T> visitor);
+        T AcceptVisitor<T>(ISampleVisitor<T> visitor);
 
         double[] GetAllValuesForColumns(int[] columns);
     }

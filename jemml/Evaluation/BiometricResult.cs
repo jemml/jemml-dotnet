@@ -23,17 +23,17 @@ namespace jemml.Evaluation
             return threshold;
         }
 
-        public List<ErrorRatePair> getErrorRates()
+        public List<ErrorRatePair> GetErrorRates()
         {
             return errorRates;
         }
 
         public double GetERR()
         {
-            double totalAcceptedTests = errorRates.Select(errorRate => errorRate.getTotalAcceptedTestCount()).Sum();
-            double totalRejectedTests = errorRates.Select(errorRate => errorRate.getTotalRejectedTestCount()).Sum();
-            double falseAccepted = errorRates.Select(errorRate => errorRate.getFalseAcceptedCount()).Sum();
-            double falseRejected = errorRates.Select(errorRate => errorRate.getFalseRejectedCount()).Sum();
+            double totalAcceptedTests = errorRates.Select(errorRate => errorRate.GetTotalAcceptedTestCount()).Sum();
+            double totalRejectedTests = errorRates.Select(errorRate => errorRate.GetTotalRejectedTestCount()).Sum();
+            double falseAccepted = errorRates.Select(errorRate => errorRate.GetFalseAcceptedCount()).Sum();
+            double falseRejected = errorRates.Select(errorRate => errorRate.GetFalseRejectedCount()).Sum();
             return ((falseAccepted / totalAcceptedTests) + (falseRejected / totalRejectedTests)) / 2;
         }
     }

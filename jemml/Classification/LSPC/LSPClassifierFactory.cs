@@ -5,7 +5,7 @@ using jemml.Data.Record;
 
 namespace jemml.Classification.LSPC
 {
-    public class LSPClassifierFactory<T> : ClassifierFactory<T> where T : Sample
+    public class LSPClassifierFactory<T> : ClassifierFactory<T> where T : ISample
     {
         protected double r;
         protected double w;
@@ -16,7 +16,7 @@ namespace jemml.Classification.LSPC
             this.w = w;
         }
 
-        public override ClassifierInstance CreateInstance(List<Sample> trainingSamples, double[] featureScaling, double[] featureShift, string[] trainingIdentifiers)
+        public override ClassifierInstance CreateInstance(List<ISample> trainingSamples, double[] featureScaling, double[] featureShift, string[] trainingIdentifiers)
         {
             LeastSquaresProbabilisticClassifier classifier = new LeastSquaresProbabilisticClassifier(trainingSamples, trainingIdentifiers, r, w);
             return new ClassifierInstance(classifier, featureScaling, featureShift, trainingIdentifiers);

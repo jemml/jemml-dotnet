@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace jemml.Data.Transform.DimensionalityReduction
 {
-    public class FuzzyMembershipReduction : DimensionalityReduction, Trainable
+    public class FuzzyMembershipReduction : DimensionalityReduction, ITrainable
     {
         [JsonProperty]
         protected int numberOfOutputs;
@@ -39,7 +39,7 @@ namespace jemml.Data.Transform.DimensionalityReduction
             return featureRankings != null;
         }
 
-        public P Train<P>(List<Sample> trainingSamples) where P : Preprocessor
+        public P Train<P>(List<ISample> trainingSamples) where P : Preprocessor
         {
             List<int> dimensionCounts = trainingSamples.Select(sample => sample.GetDimensionCount()).Distinct().ToList();
             if (dimensionCounts.Count != 1)
@@ -61,14 +61,14 @@ namespace jemml.Data.Transform.DimensionalityReduction
             return this as P;
         }
 
-        protected Dictionary<string, double[]> CalculateDimensionMeans(List<Sample> trainingSamples, int trainingDimensions, string[] identifiers)
+        protected Dictionary<string, double[]> CalculateDimensionMeans(List<ISample> trainingSamples, int trainingDimensions, string[] identifiers)
         {
             return trainingSamples.SelectMany(sample => sample.GetDimensions().Select((value, index) => new { identifier = sample.GetIdentifier(), index, value }))
                 .GroupBy(sm => sm.identifier, sm => new { sm.index, sm.value })
                 .ToDictionary(sm => sm.Key, sm => sm.GroupBy(mean => mean.index, mean => mean.value).Select(mean => mean.Average()).ToArray());
         }
 
-        protected double CalculateMembership(int featureIndex, List<Sample> trainingSamples, Dictionary<string, double[]> means, string[] identifiers)
+        protected double CalculateMembership(int featureIndex, List<ISample> trainingSamples, Dictionary<string, double[]> means, string[] identifiers)
         {
             // get and loop through each class (identifier)
             return identifiers.SelectMany(identifier =>
@@ -104,7 +104,7 @@ namespace jemml.Data.Transform.DimensionalityReduction
             return uikj;
         }
 
-        protected override double[] Reduce(Sample sample)
+        protected override double[] Reduce(ISample sample)
         {
             return sample.GetDimensions().Where((value, index) => featureRankings.Contains(index)).ToArray();
         }

@@ -6,9 +6,9 @@ using jemml.Data.Record;
 
 namespace jemml.Data.Subset.Extractor
 {
-    public class SampleAverageExtractor : SubsetExtractor
+    public class SampleAverageExtractor : ISubsetExtractor
     {
-        public List<double> Extract(Sample sample)
+        public List<double> Extract(ISample sample)
         {
             List<double> averagedSubset = new List<double>();
             foreach (Tuple<double, double[]> sampleRow in sample.GetDataRows())

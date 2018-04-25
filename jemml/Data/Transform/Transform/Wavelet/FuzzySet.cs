@@ -135,8 +135,10 @@ namespace jemml.Data.Transform.Transform.Wavelet
                 parent = this;
             }
 
-            List<FuzzySet> fsList = new List<FuzzySet>();
-            fsList.Add(parent);
+            List<FuzzySet> fsList = new List<FuzzySet>
+            {
+                parent
+            };
 
             if (parent.LeftChild != null)
             {

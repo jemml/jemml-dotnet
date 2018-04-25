@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace jemml.Data.Subset.Extractor
 {
-    public class SampleColumnExtractor : SubsetExtractor
+    public class SampleColumnExtractor : ISubsetExtractor
     {
         [JsonProperty]
         private int column;
@@ -20,7 +20,7 @@ namespace jemml.Data.Subset.Extractor
             this.column = column;
         }
 
-        public List<double> Extract(Sample sample)
+        public List<double> Extract(ISample sample)
         {
             if (column > sample.GetColumnCount())
             {

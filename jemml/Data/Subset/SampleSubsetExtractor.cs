@@ -9,21 +9,21 @@ namespace jemml.Data.Subset
     public class SampleSubsetExtractor : Preprocessor
     {
         [JsonProperty]
-        private SubsetExtractor[] subsetExtractors;
+        private ISubsetExtractor[] subsetExtractors;
 
-        protected SampleSubsetExtractor(Preprocessor predecessor, params SubsetExtractor[] subsetExtractors)
+        protected SampleSubsetExtractor(Preprocessor predecessor, params ISubsetExtractor[] subsetExtractors)
         {
             this.subsetExtractors = subsetExtractors;
         }
 
-        public SampleSubsetExtractor(params SubsetExtractor[] subsetExtractors) : this(null, subsetExtractors) { }
+        public SampleSubsetExtractor(params ISubsetExtractor[] subsetExtractors) : this(null, subsetExtractors) { }
 
-        public Sample Extract(Sample sample)
+        public ISample Extract(ISample sample)
         {
             return SubsetGenerator.GenerateFromSample(sample).ApplyExtractors(subsetExtractors).GetSubset();
         }
 
-        protected override Sample Process(Sample sample)
+        protected override ISample Process(ISample sample)
         {
             return Extract(sample);
         }

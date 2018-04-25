@@ -19,7 +19,7 @@ namespace jemml.Data.Record.Extractor
 
         public AreaSetExtractor(int areaRows) : this(areaRows, null) { }
 
-        protected override List<Tuple<double, double[]>> ExtractRows(Sample sample)
+        protected override List<Tuple<double, double[]>> ExtractRows(ISample sample)
         {
             double interval = (double)(sample.GetDataRows().Count - 1) / (double)areaRows;
             double startPoint = 0.0;
@@ -35,7 +35,7 @@ namespace jemml.Data.Record.Extractor
             return areaData;
         }
 
-        private double[] GetAreaColumns(Sample sample, int areaRow, double interval, double startPoint)
+        private double[] GetAreaColumns(ISample sample, int areaRow, double interval, double startPoint)
         {
             double[] areaColumns = new double[sample.GetColumnCount()];
             for (int column = 0; column < sample.GetColumnCount(); column++)
@@ -45,7 +45,7 @@ namespace jemml.Data.Record.Extractor
             return areaColumns;
         }
 
-        private double GetAreaTime(Sample sample, int areaRow, double interval, double startPoint)
+        private double GetAreaTime(ISample sample, int areaRow, double interval, double startPoint)
         {
             List<Tuple<double, double[]>> dataRows = sample.GetDataRows();
 
@@ -68,7 +68,7 @@ namespace jemml.Data.Record.Extractor
             return (endTime + startTime) / 2;
         }
 
-        private double GetReducedAreasForColumn(Sample sample, int areaRow, int column, double interval, double startPoint)
+        private double GetReducedAreasForColumn(ISample sample, int areaRow, int column, double interval, double startPoint)
         {
             double area = 0.0;
 

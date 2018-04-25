@@ -10,23 +10,23 @@ namespace jemml.Data.Subset
     /// </summary>
     public class SubsetGenerator
     {
-        private Sample baseSample;
+        private ISample baseSample;
         private List<List<double>> subset;
 
-        private SubsetGenerator(Sample sample)
+        private SubsetGenerator(ISample sample)
         {
             baseSample = sample;
             subset = new List<List<double>>(new List<double>[sample.GetDataRows().Count]);
         }
 
-        public static SubsetGenerator GenerateFromSample(Sample sample)
+        public static SubsetGenerator GenerateFromSample(ISample sample)
         {
             return new SubsetGenerator(sample);
         }
 
-        public SubsetGenerator ApplyExtractors(SubsetExtractor[] extractors)
+        public SubsetGenerator ApplyExtractors(ISubsetExtractor[] extractors)
         {
-            foreach (SubsetExtractor extractor in extractors)
+            foreach (ISubsetExtractor extractor in extractors)
             {
                 List<double> extractedSubset = extractor.Extract(baseSample);
                 for (int i = 0; i < extractedSubset.Count; i++)
@@ -41,14 +41,14 @@ namespace jemml.Data.Subset
             return this;
         }
 
-        public Sample GetSubset()
+        public ISample GetSubset()
         {
             List<Tuple<double, double[]>> subsetRows = new List<Tuple<double, double[]>>(new Tuple<double, double[]>[baseSample.GetDataRows().Count]);
             for (int i = 0; i < baseSample.GetDataRows().Count; i++)
             {
                 subsetRows[i] = new Tuple<double, double[]>(baseSample.GetDataRows()[i].Item1, subset[i].ToArray());
             }
-            return baseSample.AcceptVisitor<Sample>(new SampleDataVisitor(subsetRows, false));
+            return baseSample.AcceptVisitor<ISample>(new SampleDataVisitor(subsetRows, false));
         }
     }
 }

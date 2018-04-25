@@ -19,7 +19,7 @@ namespace jemml.Data.Transform.Transform
 
         public DerivativeTransform(params int[] columns) : this(null, columns) { }
 
-        protected override List<Tuple<double, double[]>> GetTransformedRows(Sample sample, int[] columns)
+        protected override List<Tuple<double, double[]>> GetTransformedRows(ISample sample, int[] columns)
         {
             List<Tuple<double, double[]>> dataRows = sample.GetDataRows();
             List<Tuple<double, double[]>> derivativeData = new List<Tuple<double, double[]>>();

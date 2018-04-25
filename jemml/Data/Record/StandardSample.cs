@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace jemml.Data.Record
 {
-    public class StandardSample : Sample
+    public class StandardSample : ISample
     {
         [JsonProperty]
         private string identifier; // unique identifier (owner of the sample)
@@ -128,7 +128,7 @@ namespace jemml.Data.Record
             return GetDataRows().SelectMany(row => row.Item2.Where((value, column) => columns.Contains(column))).ToArray(); // a flat array of values for all provided columns
         }
 
-        public virtual T AcceptVisitor<T>(SampleVisitor<T> visitor)
+        public virtual T AcceptVisitor<T>(ISampleVisitor<T> visitor)
         {
             return visitor.Accept(this);
         }

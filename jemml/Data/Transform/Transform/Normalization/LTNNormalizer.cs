@@ -25,7 +25,7 @@ namespace jemml.Data.Transform.Transform.Normalization
         {
         }
 
-        protected override List<Tuple<double, double[]>> GetTransformedRows(Sample sample, int[] columns)
+        protected override List<Tuple<double, double[]>> GetTransformedRows(ISample sample, int[] columns)
         {
             if (!sample.GetDuration().HasValue)
             {

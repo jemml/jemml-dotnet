@@ -12,7 +12,7 @@ namespace jemml.Evaluation
     public class FeatureOptimizer
     {
         public static OptimizationResult GetOptimalFeatures<T, C>(int bestNFeatures, SampleSet<T> sampleSet, C classifier, int trainingSize, int xValidationStart = 0, int xValidationLength = 1, double minInterval = Evaluator.DEFAULT_MIN_INTERVAL)
-    where T : Sample
+    where T : ISample
     where C : ClassifierFactory<T>
         {
             return GetOptimalFeatures<T>(bestNFeatures, sampleSet, (reducedSet, index) => {
@@ -22,7 +22,7 @@ namespace jemml.Evaluation
         }
 
         private static OptimizationResult GetOptimalFeatures<T>(int bestNFeatures, SampleSet<T> samples, Func<SampleSet<T>, int, Tuple<int, double>> evaluator)
-            where T : Sample
+            where T : ISample
         {
             List<int> extractionIndices = new List<int>();
             List<double> errs = new List<double>();
@@ -39,10 +39,12 @@ namespace jemml.Evaluation
         }
 
         private static Tuple<int, double> GetERR<T>(List<int> extractionIndices, int tryIndex, SampleSet<T> samples, Func<SampleSet<T>, int, Tuple<int, double>> evaluator)
-            where T : Sample
+            where T : ISample
         {
-            List<int> testIndices = new List<int>(extractionIndices);
-            testIndices.Add(tryIndex);
+            List<int> testIndices = new List<int>(extractionIndices)
+            {
+                tryIndex
+            };
             SampleSet<T> reducedSet = samples.ApplyDimensionalityReduction(new FeatureIndexReduction(testIndices.ToArray()));
             return evaluator.Invoke(reducedSet, tryIndex);
         }

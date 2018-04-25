@@ -40,7 +40,7 @@ namespace jemml.Data.Transform.Transform.Normalization.Regression
             return AmplitudeSlopes != null && PhaseSlopes != null && Templates != null;
         }
 
-        public override P Train<P>(List<Sample> trainingSamples)
+        public override P Train<P>(List<ISample> trainingSamples)
         {
             InitializeTimeAndCountProperties(trainingSamples, columns);
             // get the aligned training samples
@@ -57,7 +57,7 @@ namespace jemml.Data.Transform.Transform.Normalization.Regression
             return this as P;
         }
 
-        public static Dictionary<int, List<double[]>> FindApproximateDTWAlignment(List<Sample> samples, double bandwidth)
+        public static Dictionary<int, List<double[]>> FindApproximateDTWAlignment(List<ISample> samples, double bandwidth)
         {
             List<int> rows = samples.Select(sample => sample.GetDataRows().Count).Distinct().ToList();
             if (rows.Count != 1)
@@ -69,7 +69,7 @@ namespace jemml.Data.Transform.Transform.Normalization.Regression
             return FindApproximateDTWAlignment(samples, columnCount, rowCount, bandwidth).ToDictionary(alignedCol => alignedCol.Key, alignedCol => alignedCol.Value.Select(col => col.GetRows()).ToList());
         }
 
-        protected static Dictionary<int, List<AlignedRegressionColumn>> FindApproximateDTWAlignment(List<Sample> trainingSet, int trainingColumnCount, int trainingRowCount, double bandwidth)
+        protected static Dictionary<int, List<AlignedRegressionColumn>> FindApproximateDTWAlignment(List<ISample> trainingSet, int trainingColumnCount, int trainingRowCount, double bandwidth)
         {
             // find the best cost indices for each column <column, min cost sample index>
             Dictionary<int, int> bestCostIndex = GetMinDTWCostIndices(trainingSet, bandwidth);
@@ -87,11 +87,13 @@ namespace jemml.Data.Transform.Transform.Normalization.Regression
             return columnAlignedIndices;
         }
 
-        protected static List<AlignedRegressionColumn> CalculateCenterStarColumnAlignment(int column, int bestCostIndex, List<Sample> trainingSet, int trainingRowCount, double bandwidth)
+        protected static List<AlignedRegressionColumn> CalculateCenterStarColumnAlignment(int column, int bestCostIndex, List<ISample> trainingSet, int trainingRowCount, double bandwidth)
         {
             // create new alignment list (adding the sample with the best cost index in the first position)
-            List<AlignedRegressionColumn> alignedColumn = new List<AlignedRegressionColumn>();
-            alignedColumn.Add(new AlignedRegressionColumn(Enumerable.Range(1, trainingRowCount).ToList(), trainingSet[bestCostIndex].GetDataRows(column), trainingSet[bestCostIndex].GetIdentifier(), trainingSet[bestCostIndex].GetDuration().Value, true));
+            List<AlignedRegressionColumn> alignedColumn = new List<AlignedRegressionColumn>
+            {
+                new AlignedRegressionColumn(Enumerable.Range(1, trainingRowCount).ToList(), trainingSet[bestCostIndex].GetDataRows(column), trainingSet[bestCostIndex].GetIdentifier(), trainingSet[bestCostIndex].GetDuration().Value, true)
+            };
 
             // calculate the center star approximation for the given column in the provided training set with the previously discovered bestCostIndex
             // TODO - cleanup -> tolist foreach ...
@@ -129,7 +131,7 @@ namespace jemml.Data.Transform.Transform.Normalization.Regression
             return alignedColumn;
         }
 
-        protected static Dictionary<int, int> GetMinDTWCostIndices(List<Sample> trainingSet, double bandwidth)
+        protected static Dictionary<int, int> GetMinDTWCostIndices(List<ISample> trainingSet, double bandwidth)
         {
             // record training set with indices for easier tracking
             var indexedTrainingSet = trainingSet.Select((sample, index) => new { sample, index });
@@ -140,7 +142,7 @@ namespace jemml.Data.Transform.Transform.Normalization.Regression
                 .ToDictionary(s => new { s.sampleIndex1, s.sampleIndex2, s.column }, s => s.dtwCost);
 
             // for each column/sample index find the total cost against all other samples
-            var indexTotalCosts = indexedTrainingSet.SelectMany(s => Enumerable.Range(0, s.sample.GetColumnCount()).Select(column => new { column, index = s.index }))
+            var indexTotalCosts = indexedTrainingSet.SelectMany(s => Enumerable.Range(0, s.sample.GetColumnCount()).Select(column => new { column, s.index }))
                 .Select(t => new
                 {
                     key = t,
@@ -172,7 +174,7 @@ namespace jemml.Data.Transform.Transform.Normalization.Regression
             return DynamicTimeWarping.FindDTWCost(StandardizationHelpers.GenerateLinfNormalizedValues(d1), StandardizationHelpers.GenerateLinfNormalizedValues(d2), bandwidth);
         }
 
-        protected override List<Tuple<double, double[]>> GetTransformedRows(Sample sample, int[] columns)
+        protected override List<Tuple<double, double[]>> GetTransformedRows(ISample sample, int[] columns)
         {
             if (!sample.GetDuration().HasValue)
             {
@@ -181,10 +183,10 @@ namespace jemml.Data.Transform.Transform.Normalization.Regression
             // find the dtw path between the sample and template for each column, use it to get the slopes mapping, then apply the amplitude/phase transformation for each feature
             var pathsToTemplates = Templates.Where(template => columns.Contains(template.Key)).Select(template => new { column = template.Key, pathToTemplate = FindDTWPath(template.Value, sample.GetDataRows(template.Key), bandwidth).Select(s => s.Item2).ToArray() });
 
-            Dictionary<int, double[]> dtwAmplitudeSlopes = pathsToTemplates.Select(path => new { column = path.column, slopes = DynamicTimeWarping.GenerateFlatPath(path.pathToTemplate, StandardizationHelpers.Resample(AmplitudeSlopes[path.column], path.pathToTemplate.Length)) })
+            Dictionary<int, double[]> dtwAmplitudeSlopes = pathsToTemplates.Select(path => new { path.column, slopes = DynamicTimeWarping.GenerateFlatPath(path.pathToTemplate, StandardizationHelpers.Resample(AmplitudeSlopes[path.column], path.pathToTemplate.Length)) })
                 .ToDictionary(path => path.column, path => path.slopes);
 
-            Dictionary<int, double[]> dtwPhaseSlopes = pathsToTemplates.Select(path => new { column = path.column, slopes = DynamicTimeWarping.GenerateFlatPath(path.pathToTemplate, StandardizationHelpers.Resample(AmplitudeSlopes[path.column], path.pathToTemplate.Length)) })
+            Dictionary<int, double[]> dtwPhaseSlopes = pathsToTemplates.Select(path => new { path.column, slopes = DynamicTimeWarping.GenerateFlatPath(path.pathToTemplate, StandardizationHelpers.Resample(AmplitudeSlopes[path.column], path.pathToTemplate.Length)) })
                 .ToDictionary(path => path.column, path => path.slopes);
 
             // create amplitude warping
@@ -200,7 +202,7 @@ namespace jemml.Data.Transform.Transform.Normalization.Regression
             // normalize the phase warp to have a mean value of 1 then multiply it by the respective amplitude slopes to scale the phase accordingly
             double amplitudeSum = amplitudeWarp.SelectMany(warp => warp.amplitudeWarp).Sum(); // TODO - make this configurable so can be disabled for performance
 
-            Dictionary<int, double[]> phaseAmplitudeWarp = amplitudeWarp.Select(warp => new { column = warp.column, phaseWarped = warp.amplitudeWarp.Select((value, j) => value * (phaseWarp[warp.column][j] - phaseWarpAverage[warp.column] + 1)).ToArray() })
+            Dictionary<int, double[]> phaseAmplitudeWarp = amplitudeWarp.Select(warp => new { warp.column, phaseWarped = warp.amplitudeWarp.Select((value, j) => value * (phaseWarp[warp.column][j] - phaseWarpAverage[warp.column] + 1)).ToArray() })
                 .ToDictionary(warp => warp.column, warp => warp.phaseWarped);
 
             double phaseSum = phaseAmplitudeWarp.SelectMany(warp => warp.Value).Sum(); // TODO - make this configurable so can be disabled for performance

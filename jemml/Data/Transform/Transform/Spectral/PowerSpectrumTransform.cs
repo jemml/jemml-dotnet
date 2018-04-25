@@ -13,7 +13,7 @@ namespace jemml.Data.Transform.Transform.Spectral
 
         public PowerSpectrumTransform() : this(null) { }
 
-        protected override List<Tuple<double, double[]>> GetTransformedRows(Sample sample, int[] columns)
+        protected override List<Tuple<double, double[]>> GetTransformedRows(ISample sample, int[] columns)
         {
             return GetFourierTransformedList(GetComplexDataRows(sample));
         }

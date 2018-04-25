@@ -7,7 +7,7 @@ using Encog.Neural.Networks.Training;
 
 namespace jemml.Classification.MLP
 {
-    public class ResilientPropagation : NetworkTrain
+    public class ResilientPropagation : INetworkTrain
     {
         public ITrain TrainNetwork(IContainsFlat network, IMLDataSet trainingSet)
         {

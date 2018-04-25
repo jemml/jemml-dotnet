@@ -31,12 +31,12 @@ namespace jemml.Data.Record.Extractor
          */
         public KistlerFootstepExtractor(int forceStepStartThreshold, int silentIntervalsToEndStep, int minimumStepSize, int keepStep, params int[] columnsToMonitor) : this(forceStepStartThreshold, silentIntervalsToEndStep, minimumStepSize, keepStep, null, columnsToMonitor) { }
 
-        protected Boolean hasColumnsToMonitor()
+        protected Boolean HasColumnsToMonitor()
         {
             return columnsToMonitor.Length > 0;
         }
 
-        protected override List<Tuple<double, double[]>> ExtractRows(Sample sample)
+        protected override List<Tuple<double, double[]>> ExtractRows(ISample sample)
         {
             List<Tuple<double, double[]>> extractedRows = new List<Tuple<double, double[]>>();
             Boolean shouldRecordValue = false; // true if we should record the value
@@ -49,7 +49,7 @@ namespace jemml.Data.Record.Extractor
                 foreach (int column in row.Item2)
                 {
                     // if there were no columns provided to monitor then monitor all - otherwise check if the current column is being monitored
-                    if (!hasColumnsToMonitor() || columnsToMonitor.Contains(colNum))
+                    if (!HasColumnsToMonitor() || columnsToMonitor.Contains(colNum))
                     {
                         if (Math.Abs(column) > forceStepStartThreshold)
                         {

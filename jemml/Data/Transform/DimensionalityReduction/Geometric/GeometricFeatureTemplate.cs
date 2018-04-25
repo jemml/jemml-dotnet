@@ -8,7 +8,7 @@ namespace jemml.Data.Transform.DimensionalityReduction.Geometric
 {
     public abstract class GeometricFeatureTemplate
     {
-        public double[] ExtractFrom(Sample sample, params int[] columns)
+        public double[] ExtractFrom(ISample sample, params int[] columns)
         {
             if (columns.Length < 1)
             {

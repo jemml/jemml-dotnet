@@ -8,7 +8,7 @@ using Encog.Neural.Networks.Training.Propagation.Back;
 
 namespace jemml.Classification.MLP
 {
-    public class BackPropagation : NetworkTrain
+    public class BackPropagation : INetworkTrain
     {
         private double learningRate;
         private double momentum;

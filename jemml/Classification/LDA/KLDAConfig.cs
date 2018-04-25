@@ -20,7 +20,7 @@ namespace jemml.Classification.LDA
         [JsonConstructor]
         KLDAConfig() { /* for serialization */ }
 
-        public KLDAConfig(double gamma, List<Sample> trainingSamples, LDAType type = LDAType.ULDA)
+        public KLDAConfig(double gamma, List<ISample> trainingSamples, LDAType type = LDAType.ULDA)
             : base(type)
         {
             this.gamma = gamma;

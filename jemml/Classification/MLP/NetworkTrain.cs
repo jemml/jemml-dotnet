@@ -7,7 +7,7 @@ using Encog.Neural.Networks.Training;
 
 namespace jemml.Classification.MLP
 {
-    public interface NetworkTrain
+    public interface INetworkTrain
     {
         ITrain TrainNetwork(IContainsFlat network, IMLDataSet trainingSet);
     }

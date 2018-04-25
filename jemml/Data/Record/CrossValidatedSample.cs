@@ -36,7 +36,7 @@ namespace jemml.Data.Record
             return crossValidation;
         }
 
-        public override T AcceptVisitor<T>(SampleVisitor<T> visitor)
+        public override T AcceptVisitor<T>(ISampleVisitor<T> visitor)
         {
             return visitor.Accept(this);
         }

@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace jemml.Classification.LSPC
 {
-    public class LeastSquaresProbabilisticClassifier : Classifier
+    public class LeastSquaresProbabilisticClassifier : IClassifier
     {
         [JsonProperty]
         protected Dictionary<string, int> identifiersMap;
@@ -23,12 +23,12 @@ namespace jemml.Classification.LSPC
         [JsonConstructor]
         LeastSquaresProbabilisticClassifier() { /* for serialization */ }
 
-        public LeastSquaresProbabilisticClassifier(List<Sample> trainingSamples, string[] trainingIdentifiers, double r, double w)
+        public LeastSquaresProbabilisticClassifier(List<ISample> trainingSamples, string[] trainingIdentifiers, double r, double w)
         {
             Train(trainingSamples, trainingIdentifiers, r, w);
         }
 
-        protected void Train(List<Sample> trainingSamples, string[] trainingIdentifiers, double r, double w)
+        protected void Train(List<ISample> trainingSamples, string[] trainingIdentifiers, double r, double w)
         {
             // generate a numeric mapping of our string identifiers to unique numeric values
             identifiersMap = trainingIdentifiers.Select((identifier, index) => new { identifier, index }).ToDictionary(id => id.identifier, id => id.index);

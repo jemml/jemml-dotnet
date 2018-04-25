@@ -19,7 +19,7 @@ namespace jemml.Data.Transform.DimensionalityReduction.Geometric
 
         public GeometricReduction(GeometricFeatureExtractor extractor) : this(extractor, null) { }
 
-        protected override double[] Reduce(Sample sample)
+        protected override double[] Reduce(ISample sample)
         {
             return extractor.ExtractFrom(sample);
         }

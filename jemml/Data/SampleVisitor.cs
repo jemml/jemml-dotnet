@@ -8,7 +8,7 @@ namespace jemml.Data
     /// <summary>
     /// Visitor for Sample
     /// </summary>
-    public interface SampleVisitor<T>
+    public interface ISampleVisitor<T>
     {
         T Accept(StandardSample sample);
         T Accept(CrossValidatedSample sample);

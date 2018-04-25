@@ -7,7 +7,7 @@ namespace jemml.Classification
     /// <summary>
     /// The base interface upon which classifiers are derived
     /// </summary>
-    public interface Classifier
+    public interface IClassifier
     {
         double Verify(double[] features, string identifier);
     }

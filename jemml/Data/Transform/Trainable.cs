@@ -5,9 +5,9 @@ using jemml.Data.Record;
 
 namespace jemml.Data.Transform
 {
-    public interface Trainable
+    public interface ITrainable
     {
         bool IsTrained();
-        P Train<P>(List<Sample> trainingSamples) where P : Preprocessor;
+        P Train<P>(List<ISample> trainingSamples) where P : Preprocessor;
     }
 }

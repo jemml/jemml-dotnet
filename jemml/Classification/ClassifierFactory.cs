@@ -13,7 +13,7 @@ namespace jemml.Classification
     /// Factory that generates and trains classifier instances to be used in verification
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class ClassifierFactory<T> where T : Sample
+    public abstract class ClassifierFactory<T> where T : ISample
     {
         protected Dictionary<int, ClassifierInstance> xClassifierInstances = null;
         protected double standardMin;
@@ -25,11 +25,13 @@ namespace jemml.Classification
             this.standardMax = standardMax;
         }
 
-        public ClassifierFactory<T> Train(List<Sample> trainingSamples)
+        public ClassifierFactory<T> Train(List<ISample> trainingSamples)
         {
             // train against all provided samples (i.e. none of these are needed for verification)
-            xClassifierInstances = new Dictionary<int, ClassifierInstance>();
-            xClassifierInstances.Add(0, CreateInstance(trainingSamples.Cast<Sample>().ToList(), standardMin, standardMax));
+            xClassifierInstances = new Dictionary<int, ClassifierInstance>
+            {
+                { 0, CreateInstance(trainingSamples.Cast<ISample>().ToList(), standardMin, standardMax) }
+            };
             return this;
         }
 
@@ -46,16 +48,16 @@ namespace jemml.Classification
             return xClassifierInstances != null;
         }
 
-        protected void ValidateTrainingData(List<Sample> trainingSamples)
+        protected void ValidateTrainingData(List<ISample> trainingSamples)
         {
             // check all dimensions are equal
             AssertionHelpers.WithEqualNumberOfDimensions(trainingSamples);
         }
 
-        public ClassifierInstance CreateInstance(List<Sample> trainingSamples, double standardMin, double standardMax)
+        public ClassifierInstance CreateInstance(List<ISample> trainingSamples, double standardMin, double standardMax)
         {
             // don't train imposter samples (if you know the sample's identifier they are not an "imposter" as far as classifier training is concerned)
-            List<Sample> samplesToTrain = trainingSamples.Where(sample => !sample.IsImposter()).ToList();
+            List<ISample> samplesToTrain = trainingSamples.Where(sample => !sample.IsImposter()).ToList();
 
             // validate training data
             ValidateTrainingData(samplesToTrain);
@@ -69,14 +71,14 @@ namespace jemml.Classification
             double[] featureShift = featureScaling.Select((scale, i) => standardMin - (featureMin[i] * scale)).ToArray();
 
             // apply scaling/shift to the features in each training sample
-            List<Sample> standardizedSamples = samplesToTrain.Select(sample => sample.AcceptVisitor(
+            List<ISample> standardizedSamples = samplesToTrain.Select(sample => sample.AcceptVisitor(
                 new SampleScaledDimensionVisitor(featureScaling, featureShift))).ToList();
 
             string[] trainingIdentifiers = SampleSetHelpers.GetIdentifiers(samplesToTrain, false);
             return CreateInstance(standardizedSamples, featureScaling, featureShift, trainingIdentifiers);
         }
 
-        public abstract ClassifierInstance CreateInstance(List<Sample> trainingSamples, double[] featureScaling, double[] featureShift, string[] trainingIdentifiers);
+        public abstract ClassifierInstance CreateInstance(List<ISample> trainingSamples, double[] featureScaling, double[] featureShift, string[] trainingIdentifiers);
 
         public ClassifierInstance GetInstance(int crossValidation = 0)
         {

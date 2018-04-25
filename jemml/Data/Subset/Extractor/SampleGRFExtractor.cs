@@ -6,9 +6,9 @@ using jemml.Data.Record;
 
 namespace jemml.Data.Subset.Extractor
 {
-    public class SampleGRFExtractor : SubsetExtractor
+    public class SampleGRFExtractor : ISubsetExtractor
     {
-        public List<double> Extract(Sample sample)
+        public List<double> Extract(ISample sample)
         {
             List<double[]> sampleGRF = new List<double[]>();
             double[] previousRow = Enumerable.Repeat(0.0, 88).ToArray();
