@@ -1,21 +1,145 @@
 ﻿{
   "$schema": "http://json-schema.org/draft-04/schema",
-  "title": "JSON Schema for my JSON file format",
-
+  "title": "JEMML Data Processor",
+  "description": "This schema defines operations performed by examples in the JEMML library",
   "type": "object",
-
-  "properties": {
-    "name": {
-      "type": "string",
-      "description": "This shows up in tooltips for the 'name' property."
+      "properties": {
+        "type": {
+            "type": "string",
+            "title": "Action",
+            "description": "The target machine learning action to perform",
+            "enum": [
+                "PREPROCESS_DATA",
+                "CLASSIFY_DATA",
+                "TRAIN_PREPROCESSOR",
+                "TRAIN_CLASSIFIER",
+                "GENERATE_ERR"
+            ]
+        }
     },
-    "versions": {
-      "type": "array",
-      "description": "An array of version numbers.",
-      "minItems": 1,
-      "items": {
-        "type": "number"
-      }
+    "dependencies": {
+        "type": {
+            "oneOf": [
+                {
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "PREPROCESS_DATA"
+                            ]
+                        },
+                        "input": {
+                            "title": "Input Configuration",
+                            "$ref":  "#/definitions/input"
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "CLASSIFY_DATA"
+                            ]
+                        },
+                        "preprocessors": {
+                            "type": "string"
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "TRAIN_PREPROCESSOR"
+                            ]
+                        },
+                        "preprocessors": {
+                            "type": "string"
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "TRAIN_CLASSIFIER"
+                            ]
+                        },
+                        "preprocessors": {
+                            "type": "string"
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "type": {
+                            "enum": [
+                                "GENERATE_ERR"
+                            ]
+                        },
+                        "preprocessors": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    "definitions": {
+        "input": {
+            "type": "object",
+            "properties": {
+                "inputFormat": {
+                    "type": "string",
+                    "title": "Input Format",
+                    "enum": [
+                        "JSONGZ",
+                        "CSV",
+                        "MAT",
+                        "ANC"
+                    ]
+                }
+            },
+            "dependencies": {
+                "inputFormat": {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "inputFormat": {
+                                    "enum": [
+                                        "JSONGZ"
+                                    ]
+                                },
+                                "filePath": {
+                                    "type": "string",
+                                    "title": "JSON GZIP File Path"
+                                }
+                            }
+                        },
+                        {
+                            "properties": {
+                                "inputFormat": {
+                                    "enum": [
+                                        "CSV",
+                                        "MAT",
+                                        "ANC"
+                                    ]
+                                },
+                                "filePath": {
+                                    "type": "string",
+                                    "title": "Input Index File Path"
+                                },
+                                "directories": {
+                                    "type": "array",
+                                    "title": "Sample Folders",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }
     }
-  }
 }

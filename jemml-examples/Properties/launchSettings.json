@@ -2,7 +2,7 @@
   "profiles": {
     "jemml-examples": {
         "commandName": "Project",
-        "commandLineArgs": "-i ../../../Configuration/examples-input.json -o ../../../Configuration/examples-output.json"
+        "commandLineArgs": "-i Configuration/examples-input.json"
     }
   }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using McMaster.Extensions.CommandLineUtils;
 
 namespace jemml_examples
@@ -12,13 +13,19 @@ namespace jemml_examples
         [Option("-i | --input", Description = "The input file")]
         public string InputFile { get; }
 
-        [Option("-o | --output", Description = "The output file", ShortName = "o")]
-        public string OutputFile { get; }
-
         private void OnExecute()
         {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            string[] names = assembly.GetManifestResourceNames();
+            Stream test = assembly.GetManifestResourceStream("jemml-examples.Configuration.schema.json");
+            using (StreamReader schemaReader = new StreamReader(assembly.GetManifestResourceStream("jemml-examples.Configuration.schema.json")))
+            {
+                string schema = schemaReader.ReadToEnd();
+                Console.WriteLine("schema: {0}", schema);
+            }
+
             string inputtest = File.ReadAllText(InputFile);
-            Console.WriteLine("input file {0}, output file {1}", InputFile, OutputFile);
+            Console.WriteLine("input file {0}", InputFile);
             Console.ReadLine();
         }
 
