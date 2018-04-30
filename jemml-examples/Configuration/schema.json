@@ -3,7 +3,7 @@
   "title": "JEMML Data Processor",
   "description": "This schema defines operations performed by examples in the JEMML library",
   "type": "object",
-      "properties": {
+    "properties": {
         "type": {
             "type": "string",
             "title": "Action",
@@ -15,6 +15,10 @@
                 "TRAIN_CLASSIFIER",
                 "GENERATE_ERR"
             ]
+        },
+        "input": {
+            "title": "Input Configuration",
+            "$ref": "#/definitions/input"
         }
     },
     "dependencies": {
@@ -27,9 +31,8 @@
                                 "PREPROCESS_DATA"
                             ]
                         },
-                        "input": {
-                            "title": "Input Configuration",
-                            "$ref":  "#/definitions/input"
+                        "output": {
+                            "$ref": "#/definitions/output/multi"
                         }
                     }
                 },
@@ -39,6 +42,9 @@
                             "enum": [
                                 "CLASSIFY_DATA"
                             ]
+                        },
+                        "output": {
+                            "$ref": "#/definitions/output/multi"
                         },
                         "preprocessors": {
                             "type": "string"
@@ -52,6 +58,9 @@
                                 "TRAIN_PREPROCESSOR"
                             ]
                         },
+                        "output": {
+                            "$ref": "#/definitions/output/multi"
+                        },
                         "preprocessors": {
                             "type": "string"
                         }
@@ -64,6 +73,9 @@
                                 "TRAIN_CLASSIFIER"
                             ]
                         },
+                        "output": {
+                            "$ref": "#/definitions/output/multi"
+                        },
                         "preprocessors": {
                             "type": "string"
                         }
@@ -75,6 +87,9 @@
                             "enum": [
                                 "GENERATE_ERR"
                             ]
+                        },
+                        "output": {
+                            "$ref": "#/definitions/output/multi"
                         },
                         "preprocessors": {
                             "type": "string"
@@ -128,9 +143,9 @@
                                     "type": "string",
                                     "title": "Input Index File Path"
                                 },
-                                "directories": {
+                                "paths": {
                                     "type": "array",
-                                    "title": "Sample Folders",
+                                    "title": "Sample Paths",
                                     "items": {
                                         "type": "string"
                                     }
@@ -138,6 +153,71 @@
                             }
                         }
                     ]
+                }
+            }
+        },
+        "output": {
+            "multi": {
+                "type": "object",
+                "title": "Output Configuration",
+                "properties": {
+                    "outputFormat": {
+                        "type": "string",
+                        "title": "Output Format",
+                        "enum": [
+                            "CSV",
+                            "ZJSON"
+                        ]
+                    }
+                },
+                "dependencies": {
+                    "outputFormat": {
+                        "oneOf": [
+                            {
+                                "properties": {
+                                    "outputFormat": {
+                                        "enum": [
+                                            "CSV"
+                                        ]
+                                    },
+                                    "defaultPath": {
+                                        "type": "string",
+                                        "title": "Default Path"
+                                    },
+                                    "identifierPaths": {
+                                        "type": "array",
+                                        "title": "Identifier Paths",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "identifier": {
+                                                    "type": "string",
+                                                    "title": "Identifier"
+                                                },
+                                                "path": {
+                                                    "type": "string",
+                                                    "title": "Path"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "properties": {
+                                    "outputFormat": {
+                                        "enum": [
+                                            "ZJSON"
+                                        ]
+                                    },
+                                    "filePath": {
+                                        "type": "string",
+                                        "title": "Output File Path"
+                                    }
+                                }
+                            }
+                        ]
+                    }
                 }
             }
         }
