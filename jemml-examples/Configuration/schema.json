@@ -112,6 +112,14 @@
                         "MAT",
                         "ANC"
                     ]
+                },
+                "crossValidation": {
+                    "type": "boolean",
+                    "title": "Cross Validation",
+                    "enum": [
+                        true,
+                        false
+                    ]
                 }
             },
             "dependencies": {
@@ -149,6 +157,36 @@
                                     "items": {
                                         "type": "string"
                                     }
+                                }
+                            }
+                        }
+                    ]
+                },
+                "crossValidation": {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "crossValidation": {
+                                    "enum": [
+                                        true
+                                    ]
+                                },
+                                "start": {
+                                    "type": "integer",
+                                    "title": "Cross Validation Start"
+                                },
+                                "length": {
+                                    "type": "integer",
+                                    "title": "Cross Validation Length"
+                                }
+                            }
+                        },
+                        {
+                            "properties": {
+                                "crossValidation": {
+                                    "enum": [
+                                        false
+                                    ]
                                 }
                             }
                         }
