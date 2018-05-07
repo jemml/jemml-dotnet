@@ -16,9 +16,12 @@
                 "GENERATE_ERR"
             ]
         },
-        "input": {
-            "title": "Input Configuration",
-            "$ref": "#/definitions/input"
+        "preprocessors": {
+            "type": "array",
+            "title": "Preprocessors",
+            "items": {
+                "$ref": "#/definitions/preprocessor"
+            }
         }
     },
     "dependencies": {
@@ -31,6 +34,9 @@
                                 "PREPROCESS_DATA"
                             ]
                         },
+                        "input": {
+                            "$ref": "#/definitions/inputFile"
+                        },
                         "output": {
                             "$ref": "#/definitions/output/multi"
                         }
@@ -42,6 +48,9 @@
                             "enum": [
                                 "CLASSIFY_DATA"
                             ]
+                        },
+                        "input": {
+                            "$ref": "#/definitions/input"
                         },
                         "output": {
                             "$ref": "#/definitions/output/multi"
@@ -58,6 +67,9 @@
                                 "TRAIN_PREPROCESSOR"
                             ]
                         },
+                        "input": {
+                            "$ref": "#/definitions/inputFile"
+                        },
                         "output": {
                             "$ref": "#/definitions/output/multi"
                         },
@@ -72,6 +84,9 @@
                             "enum": [
                                 "TRAIN_CLASSIFIER"
                             ]
+                        },
+                        "input": {
+                            "$ref": "#/definitions/input"
                         },
                         "output": {
                             "$ref": "#/definitions/output/multi"
@@ -88,6 +103,9 @@
                                 "GENERATE_ERR"
                             ]
                         },
+                        "input": {
+                            "$ref": "#/definitions/input"
+                        },
                         "output": {
                             "$ref": "#/definitions/output/multi"
                         },
@@ -102,20 +120,11 @@
     "definitions": {
         "input": {
             "type": "object",
+            "title": "Input Configuration",
             "properties": {
-                "inputFormat": {
-                    "type": "string",
-                    "title": "Input Format",
-                    "enum": [
-                        "JSONGZ",
-                        "CSV",
-                        "MAT",
-                        "ANC"
-                    ]
-                },
-                "crossValidation": {
+                "hasTestInput": {
                     "type": "boolean",
-                    "title": "Cross Validation",
+                    "title": "Has Test Input File",
                     "enum": [
                         true,
                         false
@@ -123,70 +132,36 @@
                 }
             },
             "dependencies": {
-                "inputFormat": {
+                "hasTestInput": {
                     "oneOf": [
                         {
                             "properties": {
-                                "inputFormat": {
-                                    "enum": [
-                                        "JSONGZ"
-                                    ]
-                                },
-                                "filePath": {
-                                    "type": "string",
-                                    "title": "JSON GZIP File Path"
-                                }
-                            }
-                        },
-                        {
-                            "properties": {
-                                "inputFormat": {
-                                    "enum": [
-                                        "CSV",
-                                        "MAT",
-                                        "ANC"
-                                    ]
-                                },
-                                "filePath": {
-                                    "type": "string",
-                                    "title": "Input Index File Path"
-                                },
-                                "paths": {
-                                    "type": "array",
-                                    "title": "Sample Paths",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
-                        }
-                    ]
-                },
-                "crossValidation": {
-                    "oneOf": [
-                        {
-                            "properties": {
-                                "crossValidation": {
+                                "hasTestInput": {
                                     "enum": [
                                         true
                                     ]
                                 },
-                                "start": {
-                                    "type": "integer",
-                                    "title": "Cross Validation Start"
+                                "trainingInput": {
+                                    "title": "Training Input",
+                                    "$ref": "#/definitions/inputFile"
                                 },
-                                "length": {
-                                    "type": "integer",
-                                    "title": "Cross Validation Length"
+                                "testInput": {
+                                    "title": "Test Input",
+                                    "$ref": "#/definitions/inputFile"
                                 }
+
                             }
                         },
                         {
                             "properties": {
-                                "crossValidation": {
+                                "hasTestInput": {
                                     "enum": [
                                         false
                                     ]
+                                },
+                                "trainingInput": {
+                                    "title":  "Training Input",
+                                    "$ref": "#/definitions/inputFile"
                                 }
                             }
                         }
@@ -256,6 +231,211 @@
                             }
                         ]
                     }
+                }
+            }
+        },
+        "inputFile": {
+            "type": "object",
+            "properties": {
+                "inputFormat": {
+                    "type": "string",
+                    "title": "Input Format",
+                    "enum": [
+                        "JSONGZ",
+                        "CSV",
+                        "MAT",
+                        "ANC"
+                    ]
+                }
+            },
+            "dependencies": {
+                "inputFormat": {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "inputFormat": {
+                                    "enum": [
+                                        "JSONGZ"
+                                    ]
+                                },
+                                "filePath": {
+                                    "type": "string",
+                                    "title": "JSON GZIP File Path"
+                                }
+                            }
+                        },
+                        {
+                            "properties": {
+                                "inputFormat": {
+                                    "enum": [
+                                        "CSV",
+                                        "MAT",
+                                        "ANC"
+                                    ]
+                                },
+                                "filePath": {
+                                    "type": "string",
+                                    "title": "Input Index File Path"
+                                },
+                                "paths": {
+                                    "type": "array",
+                                    "title": "Sample Paths",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "trainingSubset": {
+            "type": "object",
+            "properties": {
+                "crossValidation": {
+                    "type": "boolean",
+                    "title": "Cross Validation",
+                    "enum": [
+                        true,
+                        false
+                    ]
+                }
+            },
+            "dependencies": {
+                "crossValidation": {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "crossValidation": {
+                                    "enum": [
+                                        true
+                                    ]
+                                },
+                                "start": {
+                                    "type": "integer",
+                                    "title": "Cross Validation Start"
+                                },
+                                "length": {
+                                    "type": "integer",
+                                    "title": "Cross Validation Length"
+                                }
+                            }
+                        },
+                        {
+                            "properties": {
+                                "crossValidation": {
+                                    "enum": [
+                                        false
+                                    ]
+                                },
+                                "trainingSize": {
+                                    "type": "integer",
+                                    "title": "Training Size",
+                                    "description": "Used determine which samples are "
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "preprocessor": {
+            "title": "Preprocessor",
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string",
+                    "enum": [
+                        "TRANSFORMATION",
+                        "DIMENSIONALITY_REDUCTION"
+                    ]
+                }
+            },
+            "dependencies": {
+                "category": {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "category": {
+                                    "enum": [
+                                        "TRANSFORMATION"
+                                    ]
+                                },
+                                "method": {
+                                    "type": "string",
+                                    "enum": [
+                                        "OPTIMAL_WP",
+                                        "DERIVATIVE",
+                                        "MAGNITUDE_SPECTRUM",
+                                        "PSD",
+                                        "L1_NORM",
+                                        "L2_NORM",
+                                        "LINF_NORM",
+                                        "LTN",
+                                        "SNV",
+                                        "LLSR",
+                                        "LLSRDTW"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "properties": {
+                                "category": {
+                                    "enum": [
+                                        "DIMENSIONALITY_REDUCTION"
+                                    ]
+                                },
+                                "method": {
+                                    "type": "string",
+                                    "enum": [
+                                        "PCA",
+                                        "FUZZY_FEATURE",
+                                        "GEOMETRIC",
+                                        "FEATURE_INDEX"
+                                    ]
+                                }
+                            },
+                            "dependencies": {
+                                "method": {
+                                    "oneOf": [
+                                        {
+                                            "properties": {
+                                                "method": {
+                                                    "enum": [
+                                                        "PCA"
+                                                    ]
+                                                },
+                                                "analysis": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "COVARIANCE",
+                                                        "CORRELATION"
+                                                    ]
+                                                },
+                                                "components": {
+                                                    "type": "integer"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "properties": {
+                                                "method": {
+                                                    "enum": [
+                                                        "FUZZY_FEATURE"
+                                                    ]
+                                                },
+                                                "features": {
+                                                    "type": "integer"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
                 }
             }
         }
