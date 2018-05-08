@@ -35,7 +35,8 @@
                             ]
                         },
                         "input": {
-                            "$ref": "#/definitions/inputFile"
+                            "type": "object",
+                            "$ref": "#/definitions/processorInput"
                         },
                         "output": {
                             "$ref": "#/definitions/output/multi"
@@ -68,7 +69,8 @@
                             ]
                         },
                         "input": {
-                            "$ref": "#/definitions/inputFile"
+                            "type": "object",
+                            "$ref": "#/definitions/processorInput"
                         },
                         "output": {
                             "$ref": "#/definitions/output/multi"
@@ -160,8 +162,9 @@
                                     ]
                                 },
                                 "trainingInput": {
-                                    "title":  "Training Input",
-                                    "$ref": "#/definitions/inputFile"
+                                    "type": "object",
+                                    "title": "Training Input",
+                                    "$ref": "#/definitions/processorInput"
                                 }
                             }
                         }
@@ -290,6 +293,16 @@
                 }
             }
         },
+        "processorInput": {
+            "properties": {
+                "file": {
+                    "$ref": "#/definitions/inputFile"
+                },
+                "subset": {
+                    "$ref": "#/definitions/trainingSubset"
+                }
+            }
+        },
         "trainingSubset": {
             "type": "object",
             "properties": {
@@ -328,11 +341,6 @@
                                     "enum": [
                                         false
                                     ]
-                                },
-                                "trainingSize": {
-                                    "type": "integer",
-                                    "title": "Training Size",
-                                    "description": "Used determine which samples are "
                                 }
                             }
                         }
