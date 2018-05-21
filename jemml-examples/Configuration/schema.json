@@ -39,7 +39,7 @@
                             "$ref": "#/definitions/processorInput"
                         },
                         "output": {
-                            "$ref": "#/definitions/output/multi"
+                            "$ref": "#/definitions/output/single"
                         }
                     }
                 },
@@ -73,7 +73,7 @@
                             "$ref": "#/definitions/processorInput"
                         },
                         "output": {
-                            "$ref": "#/definitions/output/multi"
+                            "$ref": "#/definitions/output/single"
                         },
                         "preprocessors": {
                             "type": "string"
@@ -148,8 +148,18 @@
                                     "$ref": "#/definitions/inputFile"
                                 },
                                 "testInput": {
-                                    "title": "Test Input",
-                                    "$ref": "#/definitions/inputFile"
+                                    "type": "object",
+                                    "properties": {
+                                        "file": {
+                                            "title": "Test Input",
+                                            "$ref": "#/definitions/inputFile"
+                                        },
+                                        "applyPreprocessors": {
+                                            "title": "Apply Preprocessors",
+                                            "type": "boolean"
+                                        }
+                                    }
+
                                 }
 
                             }
@@ -164,7 +174,16 @@
                                 "trainingInput": {
                                     "type": "object",
                                     "title": "Training Input",
-                                    "$ref": "#/definitions/processorInput"
+                                    "properties": {
+                                        "file": {
+                                            "title": "Input File",
+                                            "$ref": "#/definitions/inputFile"
+                                        },
+                                        "subset": {
+                                            "title": "Preprocessor Subset",
+                                            "$ref": "#/definitions/trainingSubset"
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -235,6 +254,16 @@
                         ]
                     }
                 }
+            },
+            "single": {
+                "type": "object",
+                "title": "Output Configuration",
+                "properties": {
+                    "filePath": {
+                        "type": "string",
+                        "title": "Output File Path"
+                    }
+                }
             }
         },
         "inputFile": {
@@ -294,12 +323,54 @@
             }
         },
         "processorInput": {
+            "type": "object",
+            "title": "Preprocessor Input",
             "properties": {
                 "file": {
+                    "title": "Input File",
                     "$ref": "#/definitions/inputFile"
                 },
-                "subset": {
-                    "$ref": "#/definitions/trainingSubset"
+                "inputSet": {
+                    "type": "object",
+                    "title": "Input Set",
+                    "properties": {
+                        "single": {
+                            "type": "boolean",
+                            "title": "Preprocess as Single Set",
+                            "enum": [
+                                true,
+                                false
+                            ]
+                        }
+                    },
+                    "dependencies": {
+                        "single": {
+                            "oneOf": [
+                                {
+                                    "properties": {
+                                        "single": {
+                                            "enum": [
+                                                true
+                                            ]
+                                        }
+                                    }
+                                },
+                                {
+                                    "properties": {
+                                        "single": {
+                                            "enum": [
+                                                false
+                                            ]
+                                        },
+                                        "subset": {
+                                            "title": "Preprocessor Subset",
+                                            "$ref": "#/definitions/trainingSubset"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
                 }
             }
         },
@@ -341,6 +412,10 @@
                                     "enum": [
                                         false
                                     ]
+                                },
+                                "trainingSize": {
+                                    "type": "integer",
+                                    "title":  "Training Size"
                                 }
                             }
                         }
