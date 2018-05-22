@@ -17,10 +17,51 @@
             ]
         },
         "preprocessors": {
-            "type": "array",
-            "title": "Preprocessors",
-            "items": {
-                "$ref": "#/definitions/preprocessor"
+            "type": "object",
+            "properties": {
+                "isFile": {
+                    "type": "boolean",
+                    "title": "Load From File",
+                    "enum": [
+                        true,
+                        false
+                    ]
+                }
+            },
+            "dependencies": {
+                "isFile": {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "isFile": {
+                                    "enum": [
+                                        true
+                                    ]
+                                },
+                                "filePath": {
+                                    "type": "string",
+                                    "title": "File Path"
+                                }
+                            }
+                        },
+                        {
+                            "properties": {
+                                "isFile": {
+                                    "enum": [
+                                        false
+                                    ]
+                                },
+                                "proprecessorList": {
+                                    "type": "array",
+                                    "title": "Preprocessors",
+                                    "items": {
+                                        "$ref": "#/definitions/preprocessor"
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
             }
         }
     },
@@ -55,9 +96,6 @@
                         },
                         "output": {
                             "$ref": "#/definitions/output/multi"
-                        },
-                        "preprocessors": {
-                            "type": "string"
                         }
                     }
                 },
@@ -74,9 +112,6 @@
                         },
                         "output": {
                             "$ref": "#/definitions/output/single"
-                        },
-                        "preprocessors": {
-                            "type": "string"
                         }
                     }
                 },
@@ -92,9 +127,6 @@
                         },
                         "output": {
                             "$ref": "#/definitions/output/multi"
-                        },
-                        "preprocessors": {
-                            "type": "string"
                         }
                     }
                 },
@@ -110,9 +142,6 @@
                         },
                         "output": {
                             "$ref": "#/definitions/output/multi"
-                        },
-                        "preprocessors": {
-                            "type": "string"
                         }
                     }
                 }
@@ -461,6 +490,138 @@
                                         "LLSRDTW"
                                     ]
                                 }
+                            },
+                            "dependencies": {
+                                "method": {
+                                    "oneOf": [
+                                        {
+                                            "properties": {
+                                                "method": {
+                                                    "enum": [
+                                                        "OPTIMAL_WP"
+                                                    ]
+                                                },
+                                                "parameters": {
+                                                    "$ref": "#/definitions/preprocessorParams/transform/optimalWavelet"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "properties": {
+                                                "method": {
+                                                    "enum": [
+                                                        "DERIVATIVE"
+                                                    ]
+                                                },
+                                                "parameters": {
+                                                    "$ref": "#/definitions/preprocessorParams/transform/columnOnlyParam"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "properties": {
+                                                "method": {
+                                                    "enum": [
+                                                        "MAGNITUDE_SPECTRUM"
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "properties": {
+                                                "method": {
+                                                    "enum": [
+                                                        "PSD"
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "properties": {
+                                                "method": {
+                                                    "enum": [
+                                                        "L1_NORM"
+                                                    ]
+                                                },
+                                                "parameters": {
+                                                    "$ref": "#/definitions/preprocessorParams/transform/columnOnlyParam"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "properties": {
+                                                "method": {
+                                                    "enum": [
+                                                        "L2_NORM"
+                                                    ]
+                                                },
+                                                "parameters": {
+                                                    "$ref": "#/definitions/preprocessorParams/transform/columnOnlyParam"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "properties": {
+                                                "method": {
+                                                    "enum": [
+                                                        "LINF_NORM"
+                                                    ]
+                                                },
+                                                "parameters": {
+                                                    "$ref": "#/definitions/preprocessorParams/transform/columnOnlyParam"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "properties": {
+                                                "method": {
+                                                    "enum": [
+                                                        "LTN"
+                                                    ]
+                                                },
+                                                "parameters": {
+                                                    "$ref": "#/definitions/preprocessorParams/transform/ltn"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "properties": {
+                                                "method": {
+                                                    "enum": [
+                                                        "SNV"
+                                                    ]
+                                                },
+                                                "parameters": {
+                                                    "$ref": "#/definitions/preprocessorParams/transform/columnOnlyParam"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "properties": {
+                                                "method": {
+                                                    "enum": [
+                                                        "LLSR"
+                                                    ]
+                                                },
+                                                "parameters": {
+                                                    "$ref": "#/definitions/preprocessorParams/transform/columnOnlyParam"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "properties": {
+                                                "method": {
+                                                    "enum": [
+                                                        "LLSRDTW"
+                                                    ]
+                                                },
+                                                "parameters": {
+                                                    "$ref": "#/definitions/preprocessorParams/transform/llsrdtw"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
                             }
                         },
                         {
@@ -519,6 +680,106 @@
                             }
                         }
                     ]
+                }
+            }
+        },
+        "preprocessorParams": {
+            "transform": {
+                "optimalWavelet": {
+                    "type": "object",
+                    "properties": {
+                        "wavelet": {
+                            "type": "string",
+                            "enum": [
+                                "COIF06",
+                                "DAUB02",
+                                "DAUB04",
+                                "LEGE04",
+                                "LEGE06"
+                            ]
+                        },
+                        "toLevel": {
+                            "type": "integer"
+                        },
+                        "r": {
+                            "type": "number"
+                        },
+                        "columns": {
+                            "$ref": "#/definitions/preprocessorParams/transform/columns"
+                        }
+                    }
+                },
+                "ltn": {
+                    "type": "object",
+                    "properties": {
+                        "standardTime": {
+                            "type": "number"
+                        },
+                        "columns": {
+                            "$ref": "#/definitions/preprocessorParams/transform/columns"
+                        }
+                    }
+                },
+                "llsrdtw": {
+                    "type": "object",
+                    "properties": {
+                        "bandwidth": {
+                            "type": "integer"
+                        },
+                        "columns": {
+                            "$ref": "#/definitions/preprocessorParams/transform/columns"
+                        }
+                    }
+                },
+                "columnOnlyParam": {
+                    "type": "object",
+                    "properties": {
+                        "columns": {
+                            "$ref": "#/definitions/preprocessorParams/transform/columns"
+                        }
+                    }
+                },
+                "columns": {
+                    "type": "object",
+                    "properties": {
+                        "transformAll": {
+                            "type": "boolean",
+                            "enum": [
+                                true,
+                                false
+                            ]
+                        }
+                    },
+                    "dependencies": {
+                        "transformAll": {
+                            "oneOf": [
+                                {
+                                    "properties": {
+                                        "transformAll": {
+                                            "enum": [
+                                                true
+                                            ]
+                                        }
+                                    }
+                                },
+                                {
+                                    "properties": {
+                                        "transformAll": {
+                                            "enum": [
+                                                false
+                                            ]
+                                        },
+                                        "useColumns": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "integer"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
                 }
             }
         }
