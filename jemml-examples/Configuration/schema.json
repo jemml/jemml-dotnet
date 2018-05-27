@@ -672,6 +672,18 @@
                                             "properties": {
                                                 "method": {
                                                     "enum": [
+                                                        "GEOMETRIC"
+                                                    ]
+                                                },
+                                                "parameters": {
+                                                    "$ref": "#/definitions/preprocessorParams/dimensionalityReduction/geometric"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "properties": {
+                                                "method": {
+                                                    "enum": [
                                                         "FEATURE_INDEX"
                                                     ]
                                                 },
@@ -818,6 +830,142 @@
                             "type": "array",
                             "items": {
                                 "type": "integer"
+                            }
+                        }
+                    }
+                },
+                "geometric": {
+                    "type": "object",
+                    "properties": {
+                        "templates": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "templateType": {
+                                        "type": "string",
+                                        "enum": [
+                                            "AREA",
+                                            "EUCLIDEAN",
+                                            "MEAN",
+                                            "STANDARD",
+                                            "EXTREMA"
+                                        ]
+                                    },
+                                    "columns": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "dependencies": {
+                                    "templateType": {
+                                        "oneOf": [
+                                            {
+                                                "properties": {
+                                                    "templateType": {
+                                                        "enum": [
+                                                            "AREA",
+                                                            "EUCLIDEAN",
+                                                            "MEAN",
+                                                            "STANDARD"
+                                                        ]
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "properties": {
+                                                    "templateType": {
+                                                        "enum": [
+                                                            "EXTREMA"
+                                                        ]
+                                                    },
+                                                    "start": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "LOCAL_MAX",
+                                                            "LOCAL_MIN"
+                                                        ]
+                                                    },
+                                                    "points": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "sensitivity": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "dataModel": {
+                                                                    "type": "string",
+                                                                    "enum": [
+                                                                        "TIME",
+                                                                        "AMPLITUDE",
+                                                                        "TIME_AMPLITUDE"
+                                                                    ]
+                                                                },
+                                                                "startAmplitude": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "searchIndexLimit": {
+                                                                    "type": "integer"
+                                                                },
+                                                                "hasRecovery": {
+                                                                    "type": "boolean",
+                                                                    "enum": [
+                                                                        true,
+                                                                        false
+                                                                    ]
+                                                                }
+                                                            },
+                                                            "dependencies": {
+                                                                "hasRecovery": {
+                                                                    "oneOf": [
+                                                                        {
+                                                                            "properties": {
+                                                                                "hasRecovery": {
+                                                                                    "enum": [
+                                                                                        true
+                                                                                    ]
+                                                                                },
+                                                                                "recovery": {
+                                                                                    "type": "object",
+                                                                                    "properties": {
+                                                                                        "firstTriangularLength": {
+                                                                                            "type": "integer"
+                                                                                        },
+                                                                                        "firstPointSensitivity": {
+                                                                                            "type": "integer"
+                                                                                        },
+                                                                                        "secondTriangularLength": {
+                                                                                            "type": "integer"
+                                                                                        },
+                                                                                        "secondPointSensitivity": {
+                                                                                            "type": "integer"
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            "properties": {
+                                                                                "hasRecovery": {
+                                                                                    "enum": [
+                                                                                        false
+                                                                                    ]
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
                             }
                         }
                     }
