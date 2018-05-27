@@ -651,15 +651,8 @@
                                                         "PCA"
                                                     ]
                                                 },
-                                                "analysis": {
-                                                    "type": "string",
-                                                    "enum": [
-                                                        "COVARIANCE",
-                                                        "CORRELATION"
-                                                    ]
-                                                },
-                                                "components": {
-                                                    "type": "integer"
+                                                "parameters": {
+                                                    "$ref": "#/definitions/preprocessorParams/dimensionalityReduction/pca"
                                                 }
                                             }
                                         },
@@ -670,8 +663,20 @@
                                                         "FUZZY_FEATURE"
                                                     ]
                                                 },
-                                                "features": {
-                                                    "type": "integer"
+                                                "parameters": {
+                                                    "$ref": "#/definitions/preprocessorParams/dimensionalityReduction/fuzzyFeatures"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "properties": {
+                                                "method": {
+                                                    "enum": [
+                                                        "FEATURE_INDEX"
+                                                    ]
+                                                },
+                                                "parameters": {
+                                                    "$ref": "#/definitions/preprocessorParams/dimensionalityReduction/featureIndex"
                                                 }
                                             }
                                         }
@@ -778,6 +783,42 @@
                                     }
                                 }
                             ]
+                        }
+                    }
+                }
+            },
+            "dimensionalityReduction": {
+                "pca": {
+                    "type": "object",
+                    "properties": {
+                        "analysis": {
+                            "type": "string",
+                            "enum": [
+                                "COVARIANCE",
+                                "CORRELATION"
+                            ]
+                        },
+                        "components": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "fuzzyFeatures": {
+                    "type": "object",
+                    "properties": {
+                        "features": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "featureIndex": {
+                    "type": "object",
+                    "properties": {
+                        "indexes": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
                         }
                     }
                 }
