@@ -307,6 +307,9 @@
                         "MAT",
                         "ANC"
                     ]
+                },
+                "inputExtractors": {
+                    "$ref": "#/definitions/inputExtractors"
                 }
             },
             "dependencies": {
@@ -399,6 +402,25 @@
                                 }
                             ]
                         }
+                    }
+                }
+            }
+        },
+        "inputExtractors": {
+            "type": "array",
+            "title": "Extractors",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "extractorType": {
+                        "type": "string",
+                        "title": "Extractor Type",
+                        "enum": [
+                            "GRF",
+                            "AVERAGE",
+                            "MAX_CONTOUR",
+                            "MIN_CONTOUR"
+                        ]
                     }
                 }
             }
