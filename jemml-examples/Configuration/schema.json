@@ -80,7 +80,7 @@
                             "$ref": "#/definitions/processorInput"
                         },
                         "output": {
-                            "$ref": "#/definitions/output/single"
+                            "$ref": "#/definitions/output/multi"
                         }
                     }
                 },
@@ -94,8 +94,11 @@
                         "input": {
                             "$ref": "#/definitions/input"
                         },
+                        "classifier": {
+                            "$ref": "#/definitions/classifier"
+                        },
                         "output": {
-                            "$ref": "#/definitions/output/multi"
+                            "$ref": "#/definitions/output/single"
                         }
                     }
                 },
@@ -125,8 +128,11 @@
                         "input": {
                             "$ref": "#/definitions/input"
                         },
+                        "classifier": {
+                            "$ref": "#/definitions/classifier"
+                        },
                         "output": {
-                            "$ref": "#/definitions/output/multi"
+                            "$ref": "#/definitions/output/single"
                         }
                     }
                 },
@@ -140,8 +146,11 @@
                         "input": {
                             "$ref": "#/definitions/input"
                         },
+                        "classifier": {
+                            "$ref": "#/definitions/classifier"
+                        },
                         "output": {
-                            "$ref": "#/definitions/output/multi"
+                            "$ref": "#/definitions/output/single"
                         }
                     }
                 }
@@ -216,6 +225,21 @@
                                 }
                             }
                         }
+                    ]
+                }
+            }
+        },
+        "classifier": {
+            "type": "object",
+            "properties": {
+                "classifierType": {
+                    "type": "string",
+                    "enum": [
+                        "KNN",
+                        "SVM",
+                        "LDA",
+                        "MLP",
+                        "LSPC"
                     ]
                 }
             }
