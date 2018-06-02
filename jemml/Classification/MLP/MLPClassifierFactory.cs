@@ -9,11 +9,11 @@ namespace jemml.Classification.MLP
     {
         protected int hiddenLayerNodes;
         protected INetworkTrain networkTrainer;
-        protected double maxIterations;
+        protected int maxIterations;
         protected double minError;
         protected MLPNetworkConfig config;
 
-        public MLPClassifierFactory(int hiddenLayerNodes, INetworkTrain networkTrainer, double maxIterations = 100000, double minError = 0.0000001, MLPNetworkConfig config = MLPNetworkConfig.ManyToOne)
+        public MLPClassifierFactory(int hiddenLayerNodes, INetworkTrain networkTrainer, int maxIterations = 100000, double minError = 0.0000001, MLPNetworkConfig config = MLPNetworkConfig.ManyToOne)
             : base(-1, 1)
         {
             this.hiddenLayerNodes = hiddenLayerNodes;

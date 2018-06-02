@@ -26,12 +26,12 @@ namespace jemml.Classification.MLP
         [JsonConstructor]
         protected MLPClassifier() { /* for serialization */ }
 
-        public MLPClassifier(int hiddenLayerNodes, INetworkTrain networkTrainer, double maxIterations, double minError, List<ISample> trainingSamples, string[] trainingIdentifiers)
+        public MLPClassifier(int hiddenLayerNodes, INetworkTrain networkTrainer, int maxIterations, double minError, List<ISample> trainingSamples, string[] trainingIdentifiers)
         {
             Train(hiddenLayerNodes, networkTrainer, maxIterations, minError, trainingSamples, trainingIdentifiers);
         }
 
-        protected virtual void Train(int hiddenLayerNodes, INetworkTrain networkTrainer, double maxIterations, double minError, List<ISample> trainingSamples, string[] trainingIdentifiers)
+        protected virtual void Train(int hiddenLayerNodes, INetworkTrain networkTrainer, int maxIterations, double minError, List<ISample> trainingSamples, string[] trainingIdentifiers)
         {
             // generate a numeric mapping of our string identifiers to unique numeric values
             identifiersMap = trainingIdentifiers.Select((identifier, index) => new { identifier, index }).ToDictionary(id => id.identifier, id => id.index);
@@ -41,7 +41,7 @@ namespace jemml.Classification.MLP
                 (sample) => Enumerable.Range(0, identifiersMap.Count).Select(i => i == identifiersMap[sample.GetIdentifier()] ? 1.0 : 0.0).ToArray()).Structure.Flat;
         }
 
-        protected BasicNetwork TrainNetwork(int hiddenLayerNodes, INetworkTrain networkTrainer, double maxIterations, double minError, List<ISample> trainingSamples, int outputs, Func<ISample, double[]> idealFunction)
+        protected BasicNetwork TrainNetwork(int hiddenLayerNodes, INetworkTrain networkTrainer, int maxIterations, double minError, List<ISample> trainingSamples, int outputs, Func<ISample, double[]> idealFunction)
         {
             // Construct the Neural Network
             BasicNetwork network = new BasicNetwork();
