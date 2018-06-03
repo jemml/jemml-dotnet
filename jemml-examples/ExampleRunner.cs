@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using McMaster.Extensions.CommandLineUtils;
+using Newtonsoft.Json;
 
 namespace jemml_examples
 {
@@ -21,6 +22,16 @@ namespace jemml_examples
             using (StreamReader schemaReader = new StreamReader(assembly.GetManifestResourceStream("jemml-examples.Configuration.schema.json")))
             {
                 string schema = schemaReader.ReadToEnd();
+
+                using (JsonTextReader reader = new JsonTextReader(new StringReader(schema)))
+                {
+                    while(reader.Read())
+                    {
+                        Console.WriteLine("{0} - {1} - {2}", reader.TokenType, reader.ValueType, reader.Value);
+                    }
+                }
+
+
                 Console.WriteLine("schema: {0}", schema);
             }
 

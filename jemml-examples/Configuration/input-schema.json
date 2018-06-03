@@ -1,0 +1,290 @@
+﻿{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "JEMML Input Schema",
+    "type": "object",
+    "properties": {
+        "input": {
+            "type": "object",
+            "title": "Input Configuration",
+            "properties": {
+                "hasTestInput": {
+                    "type": "boolean",
+                    "title": "Has Test Input File",
+                    "enum": [
+                        true,
+                        false
+                    ]
+                }
+            },
+            "dependencies": {
+                "hasTestInput": {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "hasTestInput": {
+                                    "enum": [
+                                        true
+                                    ]
+                                },
+                                "trainingInput": {
+                                    "title": "Training Input",
+                                    "$ref": "#/definitions/inputFile"
+                                },
+                                "testInput": {
+                                    "type": "object",
+                                    "properties": {
+                                        "file": {
+                                            "title": "Test Input",
+                                            "$ref": "#/definitions/inputFile"
+                                        },
+                                        "applyPreprocessors": {
+                                            "title": "Apply Preprocessors",
+                                            "type": "boolean"
+                                        }
+                                    },
+                                    "additionalProperties": false,
+                                    "required": [ "file", "applyPreprocessors" ]
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [ "hasTestInput", "testInput", "trainingInput" ]
+                        },
+                        {
+                            "properties": {
+                                "hasTestInput": {
+                                    "enum": [
+                                        false
+                                    ]
+                                },
+                                "trainingInput": {
+                                    "type": "object",
+                                    "title": "Training Input",
+                                    "properties": {
+                                        "file": {
+                                            "title": "Input File",
+                                            "$ref": "#/definitions/inputFile"
+                                        },
+                                        "subset": {
+                                            "title": "Preprocessor Subset",
+                                            "$ref": "#/definitions/trainingSubset"
+                                        }
+                                    },
+                                    "additionalProperties": false,
+                                    "required": [ "file", "subset" ]
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [ "hasTestInput", "trainingInput" ]
+                        }
+                    ]
+                }
+            }
+        },
+        "processorInput": {
+            "type": "object",
+            "title": "Preprocessor Input",
+            "properties": {
+                "file": {
+                    "title": "Input File",
+                    "$ref": "#/definitions/inputFile"
+                },
+                "inputSet": {
+                    "type": "object",
+                    "title": "Input Set",
+                    "properties": {
+                        "single": {
+                            "type": "boolean",
+                            "title": "Preprocess as Single Set",
+                            "enum": [
+                                true,
+                                false
+                            ]
+                        }
+                    },
+                    "dependencies": {
+                        "single": {
+                            "oneOf": [
+                                {
+                                    "properties": {
+                                        "single": {
+                                            "enum": [
+                                                true
+                                            ]
+                                        }
+                                    },
+                                    "additionalProperties": false,
+                                    "required": ["single"]
+                                },
+                                {
+                                    "properties": {
+                                        "single": {
+                                            "enum": [
+                                                false
+                                            ]
+                                        },
+                                        "subset": {
+                                            "title": "Preprocessor Subset",
+                                            "$ref": "#/definitions/trainingSubset"
+                                        }
+                                    },
+                                    "additionalProperties": false,
+                                    "required": [ "single", "subset" ]
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "additionalProperties": false,
+            "required": [ "file", "inputSet" ]
+        }
+    },
+    "definitions": {
+        "inputFile": {
+            "type": "object",
+            "properties": {
+                "inputFormat": {
+                    "type": "string",
+                    "title": "Input Format",
+                    "enum": [
+                        "JSONGZ",
+                        "CSV",
+                        "MAT",
+                        "ANC"
+                    ]
+                }
+            },
+            "dependencies": {
+                "inputFormat": {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "inputFormat": {
+                                    "enum": [
+                                        "JSONGZ"
+                                    ]
+                                },
+                                "filePath": {
+                                    "type": "string",
+                                    "title": "JSON GZIP File Path",
+                                    "pattern": "^(?:[\\w]\\:|\\\\)(\\\\[a-z_\\-\\s0-9\\.]+)+\\.(json\\.gz)$"
+                                },
+                                "inputExtractors": {
+                                    "$ref": "#/definitions/inputExtractors"
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [ "filePath", "inputFormat" ]
+                        },
+                        {
+                            "properties": {
+                                "inputFormat": {
+                                    "enum": [
+                                        "CSV",
+                                        "MAT",
+                                        "ANC"
+                                    ]
+                                },
+                                "filePath": {
+                                    "type": "string",
+                                    "title": "Input Index File Path",
+                                    "pattern": "^(?:[\\w]\\:|\\\\)(\\\\[a-z_\\-\\s0-9\\.]+)+$"
+                                },
+                                "paths": {
+                                    "type": "array",
+                                    "title": "Sample Paths",
+                                    "items": {
+                                        "type": "string",
+                                        "pattern": "^(?:[\\w]\\:|\\\\)(\\\\[a-z_\\-\\s0-9\\.]+)+\\\\$"
+                                    }
+                                },
+                                "inputExtractors": {
+                                    "$ref": "#/definitions/inputExtractors"
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [ "filePath", "inputFormat", "paths" ]
+                        }
+                    ]
+                }
+            }
+        },
+        "inputExtractors": {
+            "type": "array",
+            "title": "Extractors",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "extractorType": {
+                        "type": "string",
+                        "title": "Extractor Type",
+                        "enum": [
+                            "GRF",
+                            "AVERAGE",
+                            "MAX_CONTOUR",
+                            "MIN_CONTOUR"
+                        ]
+                    }
+                },
+                "additionalItems": false,
+                "required": [ "extractorType" ]
+            }
+        },
+        "trainingSubset": {
+            "type": "object",
+            "properties": {
+                "crossValidation": {
+                    "type": "boolean",
+                    "title": "Cross Validation",
+                    "enum": [
+                        true,
+                        false
+                    ]
+                }
+            },
+            "dependencies": {
+                "crossValidation": {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "crossValidation": {
+                                    "enum": [
+                                        true
+                                    ]
+                                },
+                                "start": {
+                                    "type": "integer",
+                                    "title": "Cross Validation Start",
+                                    "minimum": 0
+                                },
+                                "length": {
+                                    "type": "integer",
+                                    "title": "Cross Validation Length",
+                                    "minimum": 1
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [ "crossValidation", "start", "length" ]
+                        },
+                        {
+                            "properties": {
+                                "crossValidation": {
+                                    "enum": [
+                                        false
+                                    ]
+                                },
+                                "trainingSize": {
+                                    "type": "integer",
+                                    "title": "Training Size",
+                                    "minimum": 1
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [ "crossValidation", "trainingSize" ]
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

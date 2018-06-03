@@ -1,8 +1,8 @@
 ﻿{
-  "$schema": "http://json-schema.org/draft-04/schema",
-  "title": "JEMML Data Processor",
-  "description": "This schema defines operations performed by examples in the JEMML library",
-  "type": "object",
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "JEMML Data Processor",
+    "description": "This schema defines operations performed by examples in the JEMML library",
+    "type": "object",
     "properties": {
         "type": {
             "type": "string",
@@ -15,54 +15,6 @@
                 "TRAIN_CLASSIFIER",
                 "GENERATE_ERR"
             ]
-        },
-        "preprocessors": {
-            "type": "object",
-            "properties": {
-                "isFile": {
-                    "type": "boolean",
-                    "title": "Load From File",
-                    "enum": [
-                        true,
-                        false
-                    ]
-                }
-            },
-            "dependencies": {
-                "isFile": {
-                    "oneOf": [
-                        {
-                            "properties": {
-                                "isFile": {
-                                    "enum": [
-                                        true
-                                    ]
-                                },
-                                "filePath": {
-                                    "type": "string",
-                                    "title": "File Path"
-                                }
-                            }
-                        },
-                        {
-                            "properties": {
-                                "isFile": {
-                                    "enum": [
-                                        false
-                                    ]
-                                },
-                                "proprecessorList": {
-                                    "type": "array",
-                                    "title": "Preprocessors",
-                                    "items": {
-                                        "$ref": "#/definitions/preprocessor"
-                                    }
-                                }
-                            }
-                        }
-                    ]
-                }
-            }
         }
     },
     "dependencies": {
@@ -76,13 +28,17 @@
                             ]
                         },
                         "input": {
-                            "type": "object",
-                            "$ref": "#/definitions/processorInput"
+                            "$ref": "input-schema.json#/properties/processorInput"
+                        },
+                        "preprocessors": {
+                            "$ref": "#/definitions/preprocessors"
                         },
                         "output": {
                             "$ref": "#/definitions/output/multi"
                         }
-                    }
+                    },
+                    "additionalProperties": false,
+                    "required": ["input","output","preprocessors","type"]
                 },
                 {
                     "properties": {
@@ -92,7 +48,10 @@
                             ]
                         },
                         "input": {
-                            "$ref": "#/definitions/input"
+                            "$ref": "input-schema.json#/properties/input"
+                        },
+                        "preprocessors": {
+                            "$ref": "#/definitions/preprocessors"
                         },
                         "classifier": {
                             "$ref": "#/definitions/classifier"
@@ -100,7 +59,9 @@
                         "output": {
                             "$ref": "#/definitions/output/single"
                         }
-                    }
+                    },
+                    "additionalProperties": false,
+                    "required": [ "input", "output", "preprocessors", "type", "classifier" ]
                 },
                 {
                     "properties": {
@@ -110,13 +71,17 @@
                             ]
                         },
                         "input": {
-                            "type": "object",
-                            "$ref": "#/definitions/processorInput"
+                            "$ref": "input-schema.json#/properties/processorInput"
+                        },
+                        "preprocessors": {
+                            "$ref": "#/definitions/preprocessors"
                         },
                         "output": {
                             "$ref": "#/definitions/output/single"
                         }
-                    }
+                    },
+                    "additionalProperties": false,
+                    "required": [ "input", "output", "preprocessors", "type" ]
                 },
                 {
                     "properties": {
@@ -126,7 +91,10 @@
                             ]
                         },
                         "input": {
-                            "$ref": "#/definitions/input"
+                            "$ref": "input-schema.json#/properties/input"
+                        },
+                        "preprocessors": {
+                            "$ref": "#/definitions/preprocessors"
                         },
                         "classifier": {
                             "$ref": "#/definitions/classifier"
@@ -134,7 +102,9 @@
                         "output": {
                             "$ref": "#/definitions/output/single"
                         }
-                    }
+                    },
+                    "additionalProperties": false,
+                    "required": [ "input", "output", "preprocessors", "type", "classifier" ]
                 },
                 {
                     "properties": {
@@ -144,7 +114,10 @@
                             ]
                         },
                         "input": {
-                            "$ref": "#/definitions/input"
+                            "$ref": "input-schema.json#/properties/input"
+                        },
+                        "preprocessors": {
+                            "$ref": "#/definitions/preprocessors"
                         },
                         "classifier": {
                             "$ref": "#/definitions/classifier"
@@ -152,83 +125,14 @@
                         "output": {
                             "$ref": "#/definitions/output/single"
                         }
-                    }
+                    },
+                    "additionalProperties": false,
+                    "required": [ "input", "output", "preprocessors", "type", "classifier" ]
                 }
             ]
         }
     },
     "definitions": {
-        "input": {
-            "type": "object",
-            "title": "Input Configuration",
-            "properties": {
-                "hasTestInput": {
-                    "type": "boolean",
-                    "title": "Has Test Input File",
-                    "enum": [
-                        true,
-                        false
-                    ]
-                }
-            },
-            "dependencies": {
-                "hasTestInput": {
-                    "oneOf": [
-                        {
-                            "properties": {
-                                "hasTestInput": {
-                                    "enum": [
-                                        true
-                                    ]
-                                },
-                                "trainingInput": {
-                                    "title": "Training Input",
-                                    "$ref": "#/definitions/inputFile"
-                                },
-                                "testInput": {
-                                    "type": "object",
-                                    "properties": {
-                                        "file": {
-                                            "title": "Test Input",
-                                            "$ref": "#/definitions/inputFile"
-                                        },
-                                        "applyPreprocessors": {
-                                            "title": "Apply Preprocessors",
-                                            "type": "boolean"
-                                        }
-                                    }
-
-                                }
-
-                            }
-                        },
-                        {
-                            "properties": {
-                                "hasTestInput": {
-                                    "enum": [
-                                        false
-                                    ]
-                                },
-                                "trainingInput": {
-                                    "type": "object",
-                                    "title": "Training Input",
-                                    "properties": {
-                                        "file": {
-                                            "title": "Input File",
-                                            "$ref": "#/definitions/inputFile"
-                                        },
-                                        "subset": {
-                                            "title": "Preprocessor Subset",
-                                            "$ref": "#/definitions/trainingSubset"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    ]
-                }
-            }
-        },
         "classifier": {
             "type": "object",
             "properties": {
@@ -385,65 +289,6 @@
                 }
             }
         },
-        "inputFile": {
-            "type": "object",
-            "properties": {
-                "inputFormat": {
-                    "type": "string",
-                    "title": "Input Format",
-                    "enum": [
-                        "JSONGZ",
-                        "CSV",
-                        "MAT",
-                        "ANC"
-                    ]
-                },
-                "inputExtractors": {
-                    "$ref": "#/definitions/inputExtractors"
-                }
-            },
-            "dependencies": {
-                "inputFormat": {
-                    "oneOf": [
-                        {
-                            "properties": {
-                                "inputFormat": {
-                                    "enum": [
-                                        "JSONGZ"
-                                    ]
-                                },
-                                "filePath": {
-                                    "type": "string",
-                                    "title": "JSON GZIP File Path"
-                                }
-                            }
-                        },
-                        {
-                            "properties": {
-                                "inputFormat": {
-                                    "enum": [
-                                        "CSV",
-                                        "MAT",
-                                        "ANC"
-                                    ]
-                                },
-                                "filePath": {
-                                    "type": "string",
-                                    "title": "Input Index File Path"
-                                },
-                                "paths": {
-                                    "type": "array",
-                                    "title": "Sample Paths",
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
-                        }
-                    ]
-                }
-            }
-        },
         "classifierParams": {
             "knn": {
                 "type": "object",
@@ -573,83 +418,12 @@
                 }
             }
         },
-        "processorInput": {
-            "type": "object",
-            "title": "Preprocessor Input",
-            "properties": {
-                "file": {
-                    "title": "Input File",
-                    "$ref": "#/definitions/inputFile"
-                },
-                "inputSet": {
-                    "type": "object",
-                    "title": "Input Set",
-                    "properties": {
-                        "single": {
-                            "type": "boolean",
-                            "title": "Preprocess as Single Set",
-                            "enum": [
-                                true,
-                                false
-                            ]
-                        }
-                    },
-                    "dependencies": {
-                        "single": {
-                            "oneOf": [
-                                {
-                                    "properties": {
-                                        "single": {
-                                            "enum": [
-                                                true
-                                            ]
-                                        }
-                                    }
-                                },
-                                {
-                                    "properties": {
-                                        "single": {
-                                            "enum": [
-                                                false
-                                            ]
-                                        },
-                                        "subset": {
-                                            "title": "Preprocessor Subset",
-                                            "$ref": "#/definitions/trainingSubset"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "inputExtractors": {
-            "type": "array",
-            "title": "Extractors",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "extractorType": {
-                        "type": "string",
-                        "title": "Extractor Type",
-                        "enum": [
-                            "GRF",
-                            "AVERAGE",
-                            "MAX_CONTOUR",
-                            "MIN_CONTOUR"
-                        ]
-                    }
-                }
-            }
-        },
-        "trainingSubset": {
+        "preprocessors": {
             "type": "object",
             "properties": {
-                "crossValidation": {
+                "isFile": {
                     "type": "boolean",
-                    "title": "Cross Validation",
+                    "title": "Load From File",
                     "enum": [
                         true,
                         false
@@ -657,35 +431,34 @@
                 }
             },
             "dependencies": {
-                "crossValidation": {
+                "isFile": {
                     "oneOf": [
                         {
                             "properties": {
-                                "crossValidation": {
+                                "isFile": {
                                     "enum": [
                                         true
                                     ]
                                 },
-                                "start": {
-                                    "type": "integer",
-                                    "title": "Cross Validation Start"
-                                },
-                                "length": {
-                                    "type": "integer",
-                                    "title": "Cross Validation Length"
+                                "filePath": {
+                                    "type": "string",
+                                    "title": "File Path"
                                 }
                             }
                         },
                         {
                             "properties": {
-                                "crossValidation": {
+                                "isFile": {
                                     "enum": [
                                         false
                                     ]
                                 },
-                                "trainingSize": {
-                                    "type": "integer",
-                                    "title":  "Training Size"
+                                "proprecessorList": {
+                                    "type": "array",
+                                    "title": "Preprocessors",
+                                    "items": {
+                                        "$ref": "#/definitions/preprocessor"
+                                    }
                                 }
                             }
                         }
