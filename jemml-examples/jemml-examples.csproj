@@ -6,11 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Configuration\schema.json" />
+    <None Remove="Configuration\jemml-schema.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Configuration\schema.json" />
+    <EmbeddedResource Include="Configuration\jemml-schema.json" />
   </ItemGroup>
 
   <ItemGroup>

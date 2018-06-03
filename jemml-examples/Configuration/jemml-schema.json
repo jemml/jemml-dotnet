@@ -54,7 +54,7 @@
                             "$ref": "preprocessor-schema.json#/properties/preprocessors"
                         },
                         "classifier": {
-                            "$ref": "#/definitions/classifier"
+                            "$ref": "classifier-schema.json#/properties/classifier"
                         },
                         "output": {
                             "$ref": "#/definitions/output/single"
@@ -97,7 +97,7 @@
                             "$ref": "preprocessor-schema.json#/properties/preprocessors"
                         },
                         "classifier": {
-                            "$ref": "#/definitions/classifier"
+                            "$ref": "classifier-schema.json#/properties/classifier"
                         },
                         "output": {
                             "$ref": "#/definitions/output/single"
@@ -120,7 +120,7 @@
                             "$ref": "preprocessor-schema.json#/properties/preprocessors"
                         },
                         "classifier": {
-                            "$ref": "#/definitions/classifier"
+                            "$ref": "classifier-schema.json#/properties/classifier"
                         },
                         "output": {
                             "$ref": "#/definitions/output/single"
@@ -133,87 +133,6 @@
         }
     },
     "definitions": {
-        "classifier": {
-            "type": "object",
-            "properties": {
-                "classifierType": {
-                    "type": "string",
-                    "enum": [
-                        "KNN",
-                        "LDA",
-                        "LSPC",
-                        "MLP",
-                        "SVM"
-                    ]
-                }
-            },
-            "dependencies": {
-                "classifierType": {
-                    "oneOf": [
-                        {
-                            "properties": {
-                                "classifierType": {
-                                    "enum": [
-                                        "KNN"
-                                    ]
-                                },
-                                "parameters": {
-                                    "$ref": "#/definitions/classifierParams/knn"
-                                }
-                            }
-                        },
-                        {
-                            "properties": {
-                                "classifierType": {
-                                    "enum": [
-                                        "LDA"
-                                    ]
-                                },
-                                "parameters": {
-                                    "$ref": "#/definitions/classifierParams/lda"
-                                }
-                            }
-                        },
-                        {
-                            "properties": {
-                                "classifierType": {
-                                    "enum": [
-                                        "LSPC"
-                                    ]
-                                },
-                                "parameters": {
-                                    "$ref": "#/definitions/classifierParams/lspc"
-                                }
-                            }
-                        },
-                        {
-                            "properties": {
-                                "classifierType": {
-                                    "enum": [
-                                        "MLP"
-                                    ]
-                                },
-                                "parameters": {
-                                    "$ref": "#/definitions/classifierParams/mlp"
-                                }
-                            }
-                        },
-                        {
-                            "properties": {
-                                "classifierType": {
-                                    "enum": [
-                                        "SVM"
-                                    ]
-                                },
-                                "parameters": {
-                                    "$ref": "#/definitions/classifierParams/svm"
-                                }
-                            }
-                        }
-                    ]
-                }
-            }
-        },
         "output": {
             "multi": {
                 "type": "object",
@@ -285,135 +204,6 @@
                     "filePath": {
                         "type": "string",
                         "title": "Output File Path"
-                    }
-                }
-            }
-        },
-        "classifierParams": {
-            "knn": {
-                "type": "object",
-                "properties": {
-                    "k": {
-                        "type": "integer"
-                    }
-                }
-            },
-            "lda": {
-                "type": "object",
-                "properties": {
-                    "ldaType": {
-                        "type": "string",
-                        "enum": [
-                            "ULDA",
-                            "KLDA"
-                        ]
-                    }
-                },
-                "dependencies": {
-                    "ldaType": {
-                        "oneOf": [
-                            {
-                                "properties": {
-                                    "ldaType": {
-                                        "enum": [
-                                            "ULDA"
-                                        ]
-                                    }
-                                }
-                            },
-                            {
-                                "properties": {
-                                    "ldaType": {
-                                        "enum": [
-                                            "KLDA"
-                                        ]
-                                    },
-                                    "gamma": {
-                                        "type": "number"
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-            },
-            "lspc": {
-                "type": "object",
-                "properties": {
-                    "r": {
-                        "type": "number"
-                    },
-                    "w": {
-                        "type": "number"
-                    }
-                }
-            },
-            "mlp": {
-                "type": "object",
-                "properties": {
-                    "strategy": {
-                        "type": "string",
-                        "enum": [
-                            "ONE_TO_MANY",
-                            "MANY_TO_MANY"
-                        ]
-                    },
-                    "hiddenLayers": {
-                        "type": "integer"
-                    },
-                    "maxTrainingIterations": {
-                        "type": "integer"
-                    },
-                    "minTrainingError": {
-                        "type": "number"
-                    },
-                    "trainingStrategy": {
-                        "type": "string",
-                        "enum": [
-                            "RESILIENT",
-                            "BACKPROPAGATION"
-                        ]
-                    }
-                },
-                "dependencies": {
-                    "trainingStrategy": {
-                        "oneOf": [
-                            {
-                                "properties": {
-                                    "trainingStrategy": {
-                                        "enum": [
-                                            "RESILIENT"
-                                        ]
-                                    }
-                                }
-                            },
-                            {
-                                "properties": {
-                                    "trainingStrategy": {
-                                        "enum": [
-                                            "BACKPROPAGATION"
-                                        ]
-                                    },
-                                    "learningRate": {
-                                        "type": "number"
-                                    },
-                                    "momentum": {
-                                        "type": "number"
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-            },
-            "svm": {
-                "type": "object",
-                "properties": {
-                    "c": {
-                        "type": "number"
-                    },
-                    "gamma": {
-                        "type": "number"
                     }
                 }
             }

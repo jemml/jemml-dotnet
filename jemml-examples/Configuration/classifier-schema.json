@@ -1,0 +1,273 @@
+﻿{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "JEMML Classifier Schema",
+    "type": "object",
+    "properties": {
+        "classifier": {
+            "type": "object",
+            "properties": {
+                "classifierType": {
+                    "type": "string",
+                    "enum": [
+                        "KNN",
+                        "LDA",
+                        "LSPC",
+                        "MLP",
+                        "SVM"
+                    ]
+                }
+            },
+            "dependencies": {
+                "classifierType": {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "classifierType": {
+                                    "enum": [
+                                        "KNN"
+                                    ]
+                                },
+                                "parameters": {
+                                    "$ref": "#/definitions/classifierParams/knn"
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [ "classifierType", "parameters" ]
+                        },
+                        {
+                            "properties": {
+                                "classifierType": {
+                                    "enum": [
+                                        "LDA"
+                                    ]
+                                },
+                                "parameters": {
+                                    "$ref": "#/definitions/classifierParams/lda"
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [ "classifierType", "parameters" ]
+                        },
+                        {
+                            "properties": {
+                                "classifierType": {
+                                    "enum": [
+                                        "LSPC"
+                                    ]
+                                },
+                                "parameters": {
+                                    "$ref": "#/definitions/classifierParams/lspc"
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [ "classifierType", "parameters" ]
+                        },
+                        {
+                            "properties": {
+                                "classifierType": {
+                                    "enum": [
+                                        "MLP"
+                                    ]
+                                },
+                                "parameters": {
+                                    "$ref": "#/definitions/classifierParams/mlp"
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [ "classifierType", "parameters" ]
+                        },
+                        {
+                            "properties": {
+                                "classifierType": {
+                                    "enum": [
+                                        "SVM"
+                                    ]
+                                },
+                                "parameters": {
+                                    "$ref": "#/definitions/classifierParams/svm"
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [ "classifierType", "parameters" ]
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "definitions": {
+        "classifierParams": {
+            "knn": {
+                "type": "object",
+                "properties": {
+                    "k": {
+                        "type": "integer",
+                        "minimum": 1
+                    }
+                }
+            },
+            "lda": {
+                "type": "object",
+                "properties": {
+                    "ldaType": {
+                        "type": "string",
+                        "enum": [
+                            "ULDA",
+                            "KLDA"
+                        ]
+                    }
+                },
+                "dependencies": {
+                    "ldaType": {
+                        "oneOf": [
+                            {
+                                "properties": {
+                                    "ldaType": {
+                                        "enum": [
+                                            "ULDA"
+                                        ]
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [ "ldaType" ]
+                            },
+                            {
+                                "properties": {
+                                    "ldaType": {
+                                        "enum": [
+                                            "KLDA"
+                                        ]
+                                    },
+                                    "gamma": {
+                                        "type": "number",
+                                        "exclusiveMinimum": true,
+                                        "minimum": 0
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [ "gamma", "ldaType" ]
+                            }
+                        ]
+                    }
+                }
+            },
+            "lspc": {
+                "type": "object",
+                "properties": {
+                    "r": {
+                        "type": "number",
+                        "minimum": 0,
+                        "exclusiveMinimum": true
+                    },
+                    "w": {
+                        "type": "number",
+                        "minimum": 0,
+                        "exclusiveMinimum": true
+                    }
+                },
+                "additionalProperties": false,
+                "required": [ "r", "w" ]
+            },
+            "mlp": {
+                "type": "object",
+                "properties": {
+                    "networkStrategy": {
+                        "type": "string",
+                        "enum": [
+                            "ONE_TO_MANY",
+                            "MANY_TO_MANY"
+                        ]
+                    },
+                    "hiddenLayers": {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "maxTrainingIterations": {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "minTrainingError": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1,
+                        "exclusiveMinimum": true,
+                        "exclusiveMaximum": true
+                    },
+                    "trainingStrategy": {
+                        "type": "object",
+                        "properties": {
+                            "strategy": {
+                                "type": "string",
+                                "enum": [
+                                    "RESILIENT",
+                                    "BACKPROPAGATION"
+                                ]
+                            }
+                        },
+                        "dependencies": {
+                            "strategy": {
+                                "oneOf": [
+                                    {
+                                        "properties": {
+                                            "strategy": {
+                                                "enum": [
+                                                    "RESILIENT"
+                                                ]
+                                            }
+                                        },
+                                        "additionalProperties": false,
+                                        "required": [ "strategy" ]
+                                    },
+                                    {
+                                        "properties": {
+                                            "strategy": {
+                                                "enum": [
+                                                    "BACKPROPAGATION"
+                                                ]
+                                            },
+                                            "learningRate": {
+                                                "type": "number",
+                                                "minimum": 0,
+                                                "maximum": 1,
+                                                "exclusiveMaximum": true,
+                                                "exclusiveMinimum": true
+                                            },
+                                            "momentum": {
+                                                "type": "number",
+                                                "minimum": 0,
+                                                "maximum": 1,
+                                                "exclusiveMaximum": true,
+                                                "exclusiveMinimum": true
+                                            }
+                                        },
+                                        "additionalProperties": false,
+                                        "required": [ "strategy", "learningRate", "momentum" ]
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "additionalProperties": true,
+                "required": ["hiddenLayers","maxTrainingIterations","minTrainingError","networkStrategy","trainingStrategy"]
+            },
+            "svm": {
+                "type": "object",
+                "properties": {
+                    "c": {
+                        "type": "number",
+                        "minimum": 0,
+                        "exclusiveMinimum": true
+                    },
+                    "gamma": {
+                        "type": "number",
+                        "minimum": 0,
+                        "exclusiveMinimum": true
+                    }
+                },
+                "additionalItems": false,
+                "required": [ "c", "gamma" ]
+            }
+        }
+    }
+}
