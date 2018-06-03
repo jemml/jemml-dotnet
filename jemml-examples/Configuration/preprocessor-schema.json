@@ -1,0 +1,700 @@
+﻿{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "JSON Schema for my JSON file format",
+    "type": "object",
+    "properties": {
+        "preprocessors": {
+            "type": "object",
+            "properties": {
+                "isFile": {
+                    "type": "boolean",
+                    "title": "Load From File",
+                    "enum": [
+                        true,
+                        false
+                    ]
+                }
+            },
+            "dependencies": {
+                "isFile": {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "isFile": {
+                                    "enum": [
+                                        true
+                                    ]
+                                },
+                                "filePath": {
+                                    "type": "string",
+                                    "title": "File Path",
+                                    "pattern": "^(?:[\\w]\\:|\\\\)(\\\\[a-z_\\-\\s0-9\\.]+)+\\.(json\\.gz)$"
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [ "isFile", "filePath" ]
+                        },
+                        {
+                            "properties": {
+                                "isFile": {
+                                    "enum": [
+                                        false
+                                    ]
+                                },
+                                "proprecessorList": {
+                                    "type": "array",
+                                    "title": "Preprocessors",
+                                    "items": {
+                                        "$ref": "#/definitions/preprocessor"
+                                    }
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [ "isFile", "proprecessorList" ]
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "definitions": {
+        "preprocessor": {
+            "title": "Preprocessor",
+            "type": "object",
+            "properties": {
+                "category": {
+                    "type": "string",
+                    "enum": [
+                        "TRANSFORMATION",
+                        "DIMENSIONALITY_REDUCTION"
+                    ]
+                }
+            },
+            "dependencies": {
+                "category": {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "category": {
+                                    "enum": [
+                                        "TRANSFORMATION"
+                                    ]
+                                },
+                                "config": {
+                                    "$ref": "#/definitions/preprocessorConfig/transformConfig"
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [ "category", "config" ]
+                        },
+                        {
+                            "properties": {
+                                "category": {
+                                    "enum": [
+                                        "DIMENSIONALITY_REDUCTION"
+                                    ]
+                                },
+                                "config": {
+                                    "$ref": "#/definitions/preprocessorConfig/dimensionalityReductionConfig"
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [ "category", "config" ]
+                        }
+                    ]
+                }
+            }
+        },
+        "preprocessorConfig": {
+            "transformConfig": {
+                "type": "object",
+                "properties": {
+                    "method": {
+                        "type": "string",
+                        "enum": [
+                            "OPTIMAL_WP",
+                            "DERIVATIVE",
+                            "MAGNITUDE_SPECTRUM",
+                            "PSD",
+                            "L1_NORM",
+                            "L2_NORM",
+                            "LINF_NORM",
+                            "LTN",
+                            "SNV",
+                            "LLSR",
+                            "LLSRDTW"
+                        ]
+                    }
+                },
+                "dependencies": {
+                    "method": {
+                        "oneOf": [
+                            {
+                                "properties": {
+                                    "method": {
+                                        "enum": [
+                                            "OPTIMAL_WP"
+                                        ]
+                                    },
+                                    "parameters": {
+                                        "$ref": "#/definitions/preprocessorParams/transform/optimalWavelet"
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [ "method", "parameters" ]
+                            },
+                            {
+                                "properties": {
+                                    "method": {
+                                        "enum": [
+                                            "DERIVATIVE"
+                                        ]
+                                    },
+                                    "parameters": {
+                                        "$ref": "#/definitions/preprocessorParams/transform/columnOnlyParam"
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [ "method", "parameters" ]
+                            },
+                            {
+                                "properties": {
+                                    "method": {
+                                        "enum": [
+                                            "MAGNITUDE_SPECTRUM"
+                                        ]
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [ "method" ]
+                            },
+                            {
+                                "properties": {
+                                    "method": {
+                                        "enum": [
+                                            "PSD"
+                                        ]
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [ "method" ]
+                            },
+                            {
+                                "properties": {
+                                    "method": {
+                                        "enum": [
+                                            "L1_NORM"
+                                        ]
+                                    },
+                                    "parameters": {
+                                        "$ref": "#/definitions/preprocessorParams/transform/columnOnlyParam"
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [ "method", "parameters" ]
+                            },
+                            {
+                                "properties": {
+                                    "method": {
+                                        "enum": [
+                                            "L2_NORM"
+                                        ]
+                                    },
+                                    "parameters": {
+                                        "$ref": "#/definitions/preprocessorParams/transform/columnOnlyParam"
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [ "method", "parameters" ]
+                            },
+                            {
+                                "properties": {
+                                    "method": {
+                                        "enum": [
+                                            "LINF_NORM"
+                                        ]
+                                    },
+                                    "parameters": {
+                                        "$ref": "#/definitions/preprocessorParams/transform/columnOnlyParam"
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [ "method", "parameters" ]
+                            },
+                            {
+                                "properties": {
+                                    "method": {
+                                        "enum": [
+                                            "LTN"
+                                        ]
+                                    },
+                                    "parameters": {
+                                        "$ref": "#/definitions/preprocessorParams/transform/ltn"
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [ "method", "parameters" ]
+                            },
+                            {
+                                "properties": {
+                                    "method": {
+                                        "enum": [
+                                            "SNV"
+                                        ]
+                                    },
+                                    "parameters": {
+                                        "$ref": "#/definitions/preprocessorParams/transform/columnOnlyParam"
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [ "method", "parameters" ]
+                            },
+                            {
+                                "properties": {
+                                    "method": {
+                                        "enum": [
+                                            "LLSR"
+                                        ]
+                                    },
+                                    "parameters": {
+                                        "$ref": "#/definitions/preprocessorParams/transform/columnOnlyParam"
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [ "method", "parameters" ]
+                            },
+                            {
+                                "properties": {
+                                    "method": {
+                                        "enum": [
+                                            "LLSRDTW"
+                                        ]
+                                    },
+                                    "parameters": {
+                                        "$ref": "#/definitions/preprocessorParams/transform/llsrdtw"
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [ "method", "parameters" ]
+                            }
+                        ]
+                    }
+                }
+            },
+            "dimensionalityReductionConfig": {
+                "type": "object",
+                "properties": {
+                    "method": {
+                        "type": "string",
+                        "enum": [
+                            "PCA",
+                            "FUZZY_FEATURE",
+                            "GEOMETRIC",
+                            "FEATURE_INDEX"
+                        ]
+                    }
+                },
+                "dependencies": {
+                    "method": {
+                        "oneOf": [
+                            {
+                                "properties": {
+                                    "method": {
+                                        "enum": [
+                                            "PCA"
+                                        ]
+                                    },
+                                    "parameters": {
+                                        "$ref": "#/definitions/preprocessorParams/dimensionalityReduction/pca"
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [ "method", "parameters" ]
+                            },
+                            {
+                                "properties": {
+                                    "method": {
+                                        "enum": [
+                                            "FUZZY_FEATURE"
+                                        ]
+                                    },
+                                    "parameters": {
+                                        "$ref": "#/definitions/preprocessorParams/dimensionalityReduction/fuzzyFeatures"
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [ "method", "parameters" ]
+                            },
+                            {
+                                "properties": {
+                                    "method": {
+                                        "enum": [
+                                            "GEOMETRIC"
+                                        ]
+                                    },
+                                    "parameters": {
+                                        "$ref": "#/definitions/preprocessorParams/dimensionalityReduction/geometric"
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [ "method", "parameters" ]
+                            },
+                            {
+                                "properties": {
+                                    "method": {
+                                        "enum": [
+                                            "FEATURE_INDEX"
+                                        ]
+                                    },
+                                    "parameters": {
+                                        "$ref": "#/definitions/preprocessorParams/dimensionalityReduction/featureIndex"
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [ "method", "parameters" ]
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "preprocessorParams": {
+            "transform": {
+                "optimalWavelet": {
+                    "type": "object",
+                    "properties": {
+                        "wavelet": {
+                            "type": "string",
+                            "enum": [
+                                "COIF06",
+                                "DAUB02",
+                                "DAUB04",
+                                "LEGE04",
+                                "LEGE06"
+                            ]
+                        },
+                        "toLevel": {
+                            "type": "integer",
+                            "minimum": 0
+                        },
+                        "r": {
+                            "type": "number",
+                            "exclusiveMinimum": true,
+                            "minimum": 0
+                        },
+                        "columns": {
+                            "$ref": "#/definitions/preprocessorParams/transform/columns"
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [ "wavelet", "r", "toLevel", "columns" ]
+                },
+                "ltn": {
+                    "type": "object",
+                    "properties": {
+                        "standardTime": {
+                            "type": "number",
+                            "exclusiveMinimum": true,
+                            "minimum": 0
+                        },
+                        "columns": {
+                            "$ref": "#/definitions/preprocessorParams/transform/columns"
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [ "standardTime", "columns" ]
+                },
+                "llsrdtw": {
+                    "type": "object",
+                    "properties": {
+                        "bandwidth": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 1
+                        },
+                        "columns": {
+                            "$ref": "#/definitions/preprocessorParams/transform/columns"
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [ "bandwidth", "columns" ]
+                },
+                "columnOnlyParam": {
+                    "type": "object",
+                    "properties": {
+                        "columns": {
+                            "$ref": "#/definitions/preprocessorParams/transform/columns"
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [ "columns" ]
+                },
+                "columns": {
+                    "type": "object",
+                    "properties": {
+                        "transformAll": {
+                            "type": "boolean",
+                            "enum": [
+                                true,
+                                false
+                            ]
+                        }
+                    },
+                    "dependencies": {
+                        "transformAll": {
+                            "oneOf": [
+                                {
+                                    "properties": {
+                                        "transformAll": {
+                                            "enum": [
+                                                true
+                                            ]
+                                        }
+                                    },
+                                    "additionalProperties": false,
+                                    "required": [ "transformAll" ]
+                                },
+                                {
+                                    "properties": {
+                                        "transformAll": {
+                                            "enum": [
+                                                false
+                                            ]
+                                        },
+                                        "useColumns": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "integer",
+                                                "minimum": 0
+                                            }
+                                        }
+                                    },
+                                    "additionalProperties": false,
+                                    "required": [ "transformAll", "useColumns" ]
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "dimensionalityReduction": {
+                "pca": {
+                    "type": "object",
+                    "properties": {
+                        "analysis": {
+                            "type": "string",
+                            "enum": [
+                                "COVARIANCE",
+                                "CORRELATION"
+                            ]
+                        },
+                        "components": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [ "analysis", "components" ]
+                },
+                "fuzzyFeatures": {
+                    "type": "object",
+                    "properties": {
+                        "features": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [ "features" ]
+                },
+                "featureIndex": {
+                    "type": "object",
+                    "properties": {
+                        "indexes": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "type": "integer",
+                                "minimum": 0
+                            }
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [ "indexes" ]
+                },
+                "geometric": {
+                    "type": "object",
+                    "properties": {
+                        "templates": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "$ref": "#/definitions/geometric/config"
+                            }
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [ "templates" ]
+                }
+            }
+        },
+        "geometric": {
+            "config": {
+                "type": "object",
+                "properties": {
+                    "templateType": {
+                        "type": "string",
+                        "enum": [
+                            "AREA",
+                            "EUCLIDEAN",
+                            "MEAN",
+                            "STANDARD",
+                            "EXTREMA"
+                        ]
+                    }
+                },
+                "dependencies": {
+                    "templateType": {
+                        "oneOf": [
+                            {
+                                "properties": {
+                                    "templateType": {
+                                        "enum": [
+                                            "AREA",
+                                            "EUCLIDEAN",
+                                            "MEAN",
+                                            "STANDARD"
+                                        ]
+                                    }
+                                },
+                                "columns": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer",
+                                        "minimum": 0
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [ "templateType" ]
+                            },
+                            {
+                                "properties": {
+                                    "templateType": {
+                                        "enum": [
+                                            "EXTREMA"
+                                        ]
+                                    },
+                                    "start": {
+                                        "type": "string",
+                                        "enum": [
+                                            "LOCAL_MAX",
+                                            "LOCAL_MIN"
+                                        ]
+                                    },
+                                    "points": {
+                                        "$ref": "#/definitions/geometric/points"
+                                    },
+                                    "columns": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer",
+                                            "minimum": 0
+                                        }
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [ "templateType", "start", "points" ]
+                            }
+                        ]
+                    }
+                }
+            },
+            "points": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "sensitivity": {
+                            "type": "integer",
+                            "minimum": 1
+                        },
+                        "dataModel": {
+                            "type": "string",
+                            "enum": [
+                                "TIME",
+                                "AMPLITUDE",
+                                "TIME_AMPLITUDE"
+                            ]
+                        },
+                        "startAmplitude": {
+                            "type": "number"
+                        },
+                        "searchIndexLimit": {
+                            "type": "integer",
+                            "minimum": 1
+                        },
+                        "hasRecovery": {
+                            "type": "boolean",
+                            "enum": [
+                                true,
+                                false
+                            ]
+                        }
+                    },
+                    "dependencies": {
+                        "hasRecovery": {
+                            "oneOf": [
+                                {
+                                    "properties": {
+                                        "hasRecovery": {
+                                            "enum": [
+                                                true
+                                            ]
+                                        },
+                                        "recovery": {
+                                            "type": "object",
+                                            "properties": {
+                                                "firstTriangularLength": {
+                                                    "type": "integer",
+                                                    "minimum": 1
+                                                },
+                                                "firstPointSensitivity": {
+                                                    "type": "integer",
+                                                    "minimum": 1
+                                                },
+                                                "secondTriangularLength": {
+                                                    "type": "integer",
+                                                    "minimum": 1
+                                                },
+                                                "secondPointSensitivity": {
+                                                    "type": "integer",
+                                                    "minimum": 1
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "additionalProperties": false,
+                                    "required": [ "hasRecovery", "recovery" ]
+                                },
+                                {
+                                    "properties": {
+                                        "hasRecovery": {
+                                            "enum": [
+                                                false
+                                            ]
+                                        }
+                                    },
+                                    "additionalProperties": false,
+                                    "required": [ "hasRecovery" ]
+                                }
+                            ]
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [ "sensitivity" ]
+                }
+            }
+        }
+    }
+}

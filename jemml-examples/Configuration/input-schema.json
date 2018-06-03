@@ -193,6 +193,7 @@
                                 "paths": {
                                     "type": "array",
                                     "title": "Sample Paths",
+                                    "minItems": 1,
                                     "items": {
                                         "type": "string",
                                         "pattern": "^(?:[\\w]\\:|\\\\)(\\\\[a-z_\\-\\s0-9\\.]+)+\\\\$"
@@ -226,7 +227,6 @@
                         ]
                     }
                 },
-                "additionalItems": false,
                 "required": [ "extractorType" ]
             }
         },

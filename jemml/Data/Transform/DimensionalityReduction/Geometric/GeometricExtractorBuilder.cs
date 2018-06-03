@@ -17,7 +17,7 @@ namespace jemml.Data.Transform.DimensionalityReduction.Geometric
             this.start = start;
         }
 
-        public GeometricExtractorBuilder FindExtremaPoint(int sensitivity, ExtremaDataModel dataModel = ExtremaDataModel.TIME_AMPLITUDE, int? searchIndexLimit = null, GeometricRecoveryConfig geometricRecoveryConfig = null, int? startAmplitude = null)
+        public GeometricExtractorBuilder FindExtremaPoint(int sensitivity, ExtremaDataModel dataModel = ExtremaDataModel.TIME_AMPLITUDE, int? searchIndexLimit = null, GeometricRecoveryConfig geometricRecoveryConfig = null, double? startAmplitude = null)
         {
             searchConfig.Add(new ExtremaSearchConfig(sensitivity, dataModel, searchIndexLimit, geometricRecoveryConfig, startAmplitude));
             return this;
@@ -268,9 +268,9 @@ namespace jemml.Data.Transform.DimensionalityReduction.Geometric
             [JsonProperty]
             public GeometricRecoveryConfig GeometricRecoveryConfig { get; private set; }
             [JsonProperty]
-            public int? StartAmplitude { get; private set; }
+            public double? StartAmplitude { get; private set; }
 
-            public ExtremaSearchConfig(int sensitivity, ExtremaDataModel dataModel, int? searchIndexLimit = null, GeometricRecoveryConfig geometricRecoveryConfig = null, int? startAmplitude = null)
+            public ExtremaSearchConfig(int sensitivity, ExtremaDataModel dataModel, int? searchIndexLimit = null, GeometricRecoveryConfig geometricRecoveryConfig = null, double? startAmplitude = null)
             {
                 this.Sensitivity = sensitivity;
                 this.DataModel = dataModel;
