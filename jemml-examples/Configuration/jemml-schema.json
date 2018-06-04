@@ -34,7 +34,7 @@
                             "$ref": "preprocessor-schema.json#/properties/preprocessors"
                         },
                         "output": {
-                            "$ref": "#/definitions/output/multi"
+                            "$ref": "output-schema.json#/properties/multi"
                         }
                     },
                     "additionalProperties": false,
@@ -57,7 +57,7 @@
                             "$ref": "classifier-schema.json#/properties/classifier"
                         },
                         "output": {
-                            "$ref": "#/definitions/output/single"
+                            "$ref": "output-schema.json#/properties/single"
                         }
                     },
                     "additionalProperties": false,
@@ -77,7 +77,7 @@
                             "$ref": "preprocessor-schema.json#/properties/preprocessors"
                         },
                         "output": {
-                            "$ref": "#/definitions/output/single"
+                            "$ref": "output-schema.json#/properties/single"
                         }
                     },
                     "additionalProperties": false,
@@ -100,7 +100,7 @@
                             "$ref": "classifier-schema.json#/properties/classifier"
                         },
                         "output": {
-                            "$ref": "#/definitions/output/single"
+                            "$ref": "output-schema.json#/properties/single"
                         }
                     },
                     "additionalProperties": false,
@@ -123,90 +123,13 @@
                             "$ref": "classifier-schema.json#/properties/classifier"
                         },
                         "output": {
-                            "$ref": "#/definitions/output/single"
+                            "$ref": "output-schema.json#/properties/single"
                         }
                     },
                     "additionalProperties": false,
                     "required": [ "input", "output", "preprocessors", "type", "classifier" ]
                 }
             ]
-        }
-    },
-    "definitions": {
-        "output": {
-            "multi": {
-                "type": "object",
-                "title": "Output Configuration",
-                "properties": {
-                    "outputFormat": {
-                        "type": "string",
-                        "title": "Output Format",
-                        "enum": [
-                            "CSV",
-                            "ZJSON"
-                        ]
-                    }
-                },
-                "dependencies": {
-                    "outputFormat": {
-                        "oneOf": [
-                            {
-                                "properties": {
-                                    "outputFormat": {
-                                        "enum": [
-                                            "CSV"
-                                        ]
-                                    },
-                                    "defaultPath": {
-                                        "type": "string",
-                                        "title": "Default Path"
-                                    },
-                                    "identifierPaths": {
-                                        "type": "array",
-                                        "title": "Identifier Paths",
-                                        "items": {
-                                            "type": "object",
-                                            "properties": {
-                                                "identifier": {
-                                                    "type": "string",
-                                                    "title": "Identifier"
-                                                },
-                                                "path": {
-                                                    "type": "string",
-                                                    "title": "Path"
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            {
-                                "properties": {
-                                    "outputFormat": {
-                                        "enum": [
-                                            "ZJSON"
-                                        ]
-                                    },
-                                    "filePath": {
-                                        "type": "string",
-                                        "title": "Output File Path"
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-            },
-            "single": {
-                "type": "object",
-                "title": "Output Configuration",
-                "properties": {
-                    "filePath": {
-                        "type": "string",
-                        "title": "Output File Path"
-                    }
-                }
-            }
         }
     }
 }

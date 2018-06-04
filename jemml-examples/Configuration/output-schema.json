@@ -1,0 +1,92 @@
+﻿{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "title": "JEMML Output Schema",
+    "type": "object",
+    "properties": {
+        "multi": {
+            "type": "object",
+            "title": "Output Configuration",
+            "properties": {
+                "outputFormat": {
+                    "type": "string",
+                    "title": "Output Format",
+                    "enum": [
+                        "CSV",
+                        "ZJSON"
+                    ]
+                }
+            },
+            "dependencies": {
+                "outputFormat": {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "outputFormat": {
+                                    "enum": [
+                                        "CSV"
+                                    ]
+                                },
+                                "defaultPath": {
+                                    "type": "string",
+                                    "title": "Default Path",
+                                    "pattern": "^(?:[\\w]\\:|\\\\)(\\\\[a-z_\\-\\s0-9\\.]+)+\\\\$"
+                                },
+                                "identifierPaths": {
+                                    "type": "array",
+                                    "title": "Identifier Paths",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "identifier": {
+                                                "type": "string",
+                                                "title": "Identifier"
+                                            },
+                                            "path": {
+                                                "type": "string",
+                                                "title": "Path",
+                                                "pattern": "^(?:[\\w]\\:|\\\\)(\\\\[a-z_\\-\\s0-9\\.]+)+\\\\$"
+                                            }
+                                        },
+                                        "additionalProperties": false,
+                                        "required": [ "identifier", "path" ]
+                                    }
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [ "defaultPath", "outputFormat" ]
+                        },
+                        {
+                            "properties": {
+                                "outputFormat": {
+                                    "enum": [
+                                        "ZJSON"
+                                    ]
+                                },
+                                "filePath": {
+                                    "type": "string",
+                                    "title": "Output File Path",
+                                    "pattern": "^(?:[\\w]\\:|\\\\)(\\\\[a-z_\\-\\s0-9\\.]+)+\\.(json\\.gz)$"
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [ "filePath", "outputFormat" ]
+                        }
+                    ]
+                }
+            }
+        },
+        "single": {
+            "type": "object",
+            "title": "Output Configuration",
+            "properties": {
+                "filePath": {
+                    "type": "string",
+                    "title": "Output File Path",
+                    "pattern": "^(?:[\\w]\\:|\\\\)(\\\\[a-z_\\-\\s0-9\\.]+)+$"
+                }
+            },
+            "additionalProperties": false,
+            "required": [ "filePath" ]
+        }
+    }
+}
