@@ -1,5 +1,5 @@
 ﻿{
-    "$schema": "http://json-schema.org/draft-04/schema",
+    "$schema": "http://json-schema.org/draft-06/schema",
     "title": "JEMML Data Processor",
     "description": "This schema defines operations performed by examples in the JEMML library",
     "type": "object",
