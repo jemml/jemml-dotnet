@@ -9,6 +9,7 @@
                 "isFile": {
                     "type": "boolean",
                     "title": "Load From File",
+                    "default": false,
                     "enum": [
                         true,
                         false
@@ -434,6 +435,7 @@
                     "properties": {
                         "transformAll": {
                             "type": "boolean",
+                            "default":  true,
                             "enum": [
                                 true,
                                 false
@@ -636,6 +638,7 @@
                         },
                         "hasRecovery": {
                             "type": "boolean",
+                            "default": false,
                             "enum": [
                                 true,
                                 false

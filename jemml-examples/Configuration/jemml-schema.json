@@ -13,7 +13,7 @@
                 "CLASSIFY_DATA",
                 "TRAIN_PREPROCESSOR",
                 "TRAIN_CLASSIFIER",
-                "GENERATE_ERR"
+                "GENERATE_EER"
             ]
         }
     },
@@ -110,7 +110,7 @@
                     "properties": {
                         "type": {
                             "enum": [
-                                "GENERATE_ERR"
+                                "GENERATE_EER"
                             ]
                         },
                         "input": {
